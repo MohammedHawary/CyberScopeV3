@@ -1,0 +1,211 @@
+							/* Bars Style */
+
+#SideBar{
+	background-color: rgb(55, 61, 71);
+	border-right: 2px solid rgb(77, 81, 91);
+}
+
+#TopBar{
+	background-color: rgb(69, 77, 86);
+}
+
+#Body{
+	background-color: rgb(36, 45, 59);
+}
+
+#UnderTopBar{
+	background-color: rgb(36, 45, 59);
+	border-bottom: 2px solid rgb(77, 81, 91);
+}
+
+#Pages{
+	background-color: rgb(36, 45, 59);
+}
+
+							/* Labels Style */
+
+#CyberScopeLabel{
+	font-size: 30px;
+	color: white;
+}
+
+#MyScansLabel{
+	border: none;
+	font-size: 24px;
+	color: white;
+	text-align: left;
+}
+
+#LogedUserBtn,#LogedInUserLabel{
+
+}
+
+#FoldersLabel{
+	border:none;
+	color: rgb(199, 203, 205);
+	font-size: 12px;
+	text-align: left;
+
+}
+
+							/* Buttons Style */
+
+QPushButton{
+	color: white;
+}
+
+
+#BackBtn{
+	border: none;
+	text-align: left;
+	font-size: 14px;
+	color: rgb(29, 210, 227);
+}
+
+
+#SettingsTopBarBtn,#ScansTopBarBtn{
+	border: none;
+	color: rgb(221, 221, 221);
+	width: 100px;
+	font-size: 20px;
+}
+
+
+#TrashBtn{
+    background-image: url('png/trash_dark.png');
+    background-position: left center;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+}
+
+#AboutBtn,#MyAccountBtn,#ThemeBtn,#AllScansBtn,#MyScansBtn{
+    background-image: url('png/folder_dark.png');
+    background-position: left center;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+}
+
+#AboutBtn,#ThemeBtn,#MyAccountBtn,#TrashBtn,#AllScansBtn,#MyScansBtn{
+    height: 40px;
+    font-size: 15px;
+    text-align: left;
+    border: none;
+    color: rgb(29, 210, 227);
+}
+
+#NewFolderBtn,#NewScanBtn{
+	border: none;
+	font-size: 15px;
+	width: 150px;
+	height: 31px;
+	color: white;
+}
+#NewFolderBtn{
+	background-color: rgb(90, 93, 101);
+}
+
+#NewScanBtn{
+	background-color: rgb(19, 114, 129);
+	border: 1px solid rgb(0, 165, 181);
+}
+
+#LogedInUserBtn{
+	color:white;
+	border: none;
+	font-size: 12px;
+}
+
+#LogedUserBtn{
+	background-color: rgb(255, 255, 255);
+	background: url(png/profile-user_2.png) center center no-repeat;;
+	border: none;
+	height: 40px;
+	width: 40px;
+}
+
+							/* Buttons Events */
+
+#MyScansBtn:checked,
+#AllScansBtn:checked,
+#TrashBtn:checked,
+#MyAccountBtn:checked,
+#ThemeBtn:checked,
+#AboutBtn:checked {
+    border-left: 5px solid rgb(0, 131, 155);
+    background-color: rgb(72, 76, 86);
+    height: 40px;
+    font-size: 15px;
+    text-align: left;
+    background-image: url('png/open_folder_dark.png');
+    background-position: left center;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+}
+
+#TrashBtn:checked{
+    border-left: 5px solid rgb(0, 131, 155);
+    background-color: rgb(72, 76, 86);
+    height: 40px;
+    font-size: 15px;
+    text-align: left;
+    background-image: url('png/trash_dark.png');
+    background-position: left center;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+}
+
+#MyScansBtn:pressed,
+#AllScansBtn:pressed,
+#TrashBtn:pressed,
+#MyAccountBtn:pressed,
+#ThemeBtn:pressed,
+#AboutBtn:pressed {
+    text-align: left;
+    text-decoration: underline;
+}
+
+#MyScansBtn:hover,
+#AllScansBtn:hover,
+#TrashBtn:hover,
+#MyAccountBtn:hover,
+#ThemeBtn:hover,
+#AboutBtn:hover {
+    background-color: rgb(72, 83, 98);
+}
+
+
+#SettingsTopBarBtn:pressed,
+#ScansTopBarBtn:pressed {
+    text-decoration: underline;
+}
+
+#SettingsTopBarBtn:hover,
+#ScansTopBarBtn:hover {
+	color: white;
+}
+
+#SettingsTopBarBtn:checked,
+#ScansTopBarBtn:checked {
+	font-weight: bold;
+	color: white;
+}
+
+
+#BackBtn:hover{
+	border: none;
+	text-align: left;
+	text-decoration: underline;
+}
+
+
+#NewFolderBtn:hover{
+	background-color: rgb(72, 83, 98);
+}
+
+#NewScanBtn:hover{
+	background-color: rgb(0, 165, 181);
+}
+
+#LogedInUserBtn:hover{
+	text-decoration: underline;
+}

@@ -1,0 +1,18 @@
+<RCC>
+  <qresource prefix="newPrefix">
+    <file>account.png</file>
+    <file>clear.png</file>
+    <file>CS.jpg</file>
+    <file>logo.jpg</file>
+    <file>logo.png</file>
+    <file>My Scans.png</file>
+    <file>OWASP_TOP_10.png</file>
+    <file>OWASP_TOP_10_145x145.png</file>
+    <file>password.png</file>
+    <file>profile-user.png</file>
+    <file>profile-user_2.png</file>
+    <file>recource.py</file>
+    <file>user.png</file>
+    <file>username.png</file>
+  </qresource>
+</RCC>

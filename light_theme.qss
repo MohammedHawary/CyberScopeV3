@@ -1,0 +1,580 @@
+							/* Bars Style */
+
+#SideBar{
+	background-color: rgb(250, 250, 250);
+	border-right: 2px solid rgb(229, 229, 229);
+}
+
+#TopBar{
+	background-color: rgb(38, 55, 70);
+}
+
+#Body{
+	background-color: white;
+}
+
+#UnderTopBar{
+	background-color: white;
+	border-bottom: 2px solid rgb(229, 229, 229);
+}
+
+
+#BasicsSideBar{
+	background-color: white;
+}
+
+#SettingsTab {
+    background-color: white;
+}
+#InputsBar{
+	background-color:rgb(245, 245, 245);
+}
+
+#HostDetailsBar,#HostDetailsBar_2{
+	border-top: 1px solid rgb(219, 219, 219);
+}
+
+#ChartBar,#ChartBar_2{
+	border-top: 1px solid rgb(219, 219, 219);
+}
+
+
+							/* Different Style */
+
+#DarkThemeRadioButton{
+	font-size: 12px;
+	font-weight: bold;
+}
+
+#Frame{
+	border: 2 dashed rgb(222, 222, 222);
+	border-radius: 9px;
+
+}
+
+#tab_7,#tab_8,#tab_9,#tab_10{
+	background-color: white;
+}
+
+QTabWidget#HostInDesailsWidget::pane {
+    border-left: 0; /* Hide the left border */
+    border-right: 1px solid rgb(225, 225, 225); /* Add a right border for balance */
+    border-top: 1px solid rgb(225, 225, 225); /* Add top border */
+    border-bottom: 1px solid rgb(225, 225, 225); /* Add bottom border */
+}
+
+#HostInDesailsTopWidget{
+	border: 1px solid rgb(221, 221, 221); height: 35px; background-color: rgb(245, 245, 245);font-size: 13px; font-weight: bold;color; black;
+}
+
+#HostInDesailsBottomWidget{
+	background-color: white;border: 1px solid rgb(219, 219, 219); height: 90px; font-size: 12px;font-weight:500; 
+}
+
+QTabWidget#ScannersTemplates::pane {
+    border-left: 0; /* Hide the left border */
+    border-right: 1px solid rgb(225, 225, 225); /* Add a right border for balance */
+    border-top: 1px solid rgb(225, 225, 225); /* Add top border */
+    border-bottom: 1px solid rgb(225, 225, 225); /* Add bottom border */
+}
+
+QTabWidget#VulnerabilitiesBar::pane {
+    border-left: 0; /* Hide the left border */
+    border-right: 1px solid rgb(225, 225, 225); /* Add a right border for balance */
+    border-top: 1px solid rgb(225, 225, 225); /* Add top border */
+    border-bottom: 1px solid rgb(225, 225, 225); /* Add bottom border */
+}
+
+
+#ScannerPage{
+	background-color: white;
+}
+
+QTabBar::tab { 
+	background-color: white; color: rgb(1, 113, 185);
+	border-left: 1px solid rgb(225, 225, 225);
+	border-right: 1px solid rgb(225, 225, 225);
+	border-top: 1px solid rgb(225, 225, 225);
+	border-bottom: 1px solid rgb(225, 225, 225);
+ 	font-size: 14px;
+	width: 130px;
+	height: 40px;
+}
+
+QTabBar::tab:selected { 
+ 	background-color: white;
+	border-bottom: 10px solid rgb(225, 225, 225);
+ 	border-bottom: none;
+ 	font-weight: bold;
+ 	font-size: 14px;
+ 	color: black; 
+ }
+
+
+#line{
+	color: rgb(221, 221, 221);
+}
+
+							/* Inputs Style */
+
+#OutputPlainTextEdit,#SoluPlainTextEdit,#ImpactsPlainTextEdit,#DescPlainTextEdit{
+	font-size: 12px;
+	border: none;
+}
+
+#NewPasswordInput,#CurrentPasswordInput,#EmailInput,#FullNameInput{
+	height: 30px;
+	font-size: 15px;
+	color: black;
+	border: 1px solid rgb(204, 204, 204);
+}
+
+#NameInput,#DescriptionInput,#FolderInput,#TargetInput{
+	background-color: white;
+	border: 1px solid rgb(204, 204, 204);
+	font-size: 15px;
+	color: black;
+	height: 30px;
+}
+
+#SearchInput{
+	border: 1px solid rgb(178, 178, 178);
+	height: 25px;
+}
+
+
+							/* Labels Style */
+
+#VulnNameLabel{
+	font-size: 20px;
+}
+
+#label_30,#label_31,#label_32,#label_33,#label_35{
+	font-size: 20px;
+	font-weight: bold;
+
+}
+
+#label_26{
+	font-size: 14px;
+	font-weight: bold;
+}
+
+#label_7,#label_15,#label_16,#label_17,#label_18,#label_19,#label_20,#label_21{
+	color: black;
+	font-size: 14px;
+}
+
+
+#label,#label_2,#label_3,#label_4{
+	font-size: 16px;
+}
+
+#label_5,#label_6{
+	font-size: 16px;
+	font-weight: bold;
+}
+
+
+#label_70,#label_71,#label_72,#label_73,#label_74,#label_75,#label_76,#label_77,#label_78,#label_79,#label_80,#label_81,#label_82,#label_83,#label_84,#label_85,#label_86,#label_87,#label_88,#label_89,#label_90,#label_91,#label_92,#label_93,#label_94,#label_95,#label_96,#label_97{
+	font-size: 12px;
+}
+
+#label_23,#label_24,#label_25,#label_22{
+	font-size: 13px;
+	font-weight: bold;
+}
+
+#HostLabel{
+	padding-left: 32px;
+	font-size: 12px;
+}
+
+#VulnerabilitiesLabel{
+	font-size: 12px;
+}
+
+#CriticalLabel{
+	background-color: rgb(145, 36, 62);
+	color: white;
+}
+#HighLabel{
+	background-color: rgb(221, 75, 80);
+	color: white;
+
+}
+#MediumLabel{
+	background-color: rgb(241, 140, 67);
+	color: white;
+
+}
+#LowLabel{
+	background-color: rgb(248, 200, 81);
+	color: white;
+}
+#InfoLabel{
+	background-color: rgb(103, 172, 225);
+	color: white;
+
+}
+
+
+#CriticalLabel,#HighLabel,#MediumLabel,#LowLabel,#InfoLabel{
+	font-weight: bold;
+/*	height: 40px;*/
+}
+
+#SearchFindLabel{
+		color: rgb(130, 135, 144);
+}
+
+#NameInputLabel,#DescriptionInputLabel,#FolderInputLabel,#TargetInputLabel{
+	color: black;
+	font-size: 15px;
+}
+
+#CyberScopeLabel{
+	font-size: 30px;
+	color: white;
+}
+
+#MyScansLabel{
+	border: none;
+	font-size: 24px;
+	color: black;
+	text-align: left;
+}
+
+#EmptyFolderLabel{
+	color: rgb(188, 188, 188);
+	border:none;
+	font-size: 17px;
+}
+
+#FoldersLabel{
+	border:none;
+	padding-left: 15px;
+	padding-bottom: 10px;
+	color: rgb(199, 203, 205);
+	font-size: 12px;
+	text-align: left;
+
+}
+
+							/* Buttons Style */
+
+#SaveInputsBtn,#CanceInputsBtn{
+	width:110px;
+	height:30px;
+	font-size: 14px;
+}
+
+#SaveInputsBtn{
+	background-color: rgb(0, 113, 185);
+	color: white;
+	border-radius: 3px;
+}
+
+#CanceInputsBtn{
+	background-color: white;
+	color: black;
+	border-radius: 3px;
+}
+
+#SevBtn{
+	border-radius: 3px;
+	font-size: 12px;
+	width: 77px;
+	height: 22;
+	background-color: rgb(145, 36, 62);
+	color: white;
+}
+
+#CancelSettingBtn,#SaveSettingBtn{
+	height: 32px;
+	width: 80px;
+	font-size: 14px;
+	border: none;
+}
+
+#SaveSettingBtn{
+	background-color: rgb(0, 113, 185);
+	color: white;
+	border-radius: 3px;
+}
+
+#CancelSettingBtn{
+	background-color: white;
+	color: black;
+}
+
+#DeleteBtn{
+	color: rgb(219, 219, 219);
+	font-size: 15px;
+	font-weight: bold;
+	border: none;
+	width: 50px;
+}
+
+#VulnBtn{
+	border: none;
+	background-color: white;
+	font-size: 12px;
+	color: black;
+	text-align: left;
+}
+
+
+
+#BasicBtn,#AdvancedBtn,#AssessmentBtn{
+	border: none;
+	text-align: left;
+	border-bottom: 2 dotted rgb(222, 222, 222);
+	margin-bottom: 10px;
+	font-weight: bold;
+	font-size: 15px;
+	color: black;
+}
+
+QPushButton{
+	color: black;
+}
+
+#CreateNewScanBtn{
+	background-color: rgb(255, 255, 255);
+	color: rgb(56, 109, 156);
+	border: none;
+	font-size: 17px;
+}
+
+#BackBtn{
+	border: none;
+	text-align: left;
+	font-size: 14px;
+	color: rgb(42, 99, 149);
+}
+
+
+#SettingsTopBarBtn,#ScansTopBarBtn{
+	border: none;
+	color: rgb(221, 221, 221);
+	width: 100px;
+	font-size: 20px;
+}
+
+
+#OWASPBtn1{
+    background-image: url('png/OWASP_TOP_10_145x145.png');
+    height: 160px;
+    width: 250px;
+	border-top: 1px solid rgb(208, 208, 208);
+	border-left: 1px solid rgb(208, 208, 208);
+	border-right: 1px solid rgb(208, 208, 208);
+    background-position: center center;
+    background-repeat: no-repeat;
+
+}
+
+#OWASPBtn2{
+	color: black;
+	font-size: 14px;
+	font-weight: bold;
+	border-bottom: none;
+	border-top: none;
+	border-left: 1px solid rgb(208, 208, 208);
+	border-right: 1px solid rgb(208, 208, 208);
+}
+
+#OWASPBtn3{
+	border: none;
+	font-size: 12px;
+	border-left: 1px solid rgb(208, 208, 208);
+	border-right: 1px solid rgb(208, 208, 208);
+	border-bottom: 1px solid rgb(208, 208, 208);
+	color: rgb(181, 178, 178);
+}
+
+
+#TrashBtn{
+    background-image: url('png/trash.png');
+    background-position: left center;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+}
+
+#AboutBtn,#MyAccountBtn,#ThemeBtn,#AllScansBtn,#MyScansBtn{
+    background-image: url('png/folder.png');
+    background-position: left center;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+}
+
+#AboutBtn,#ThemeBtn,#MyAccountBtn,#TrashBtn,#AllScansBtn,#MyScansBtn{
+    height: 40px;
+    font-size: 15px;
+    text-align: left;
+    border: none;
+    color: black;
+}
+
+#NewFolderBtn,#NewScanBtn{
+	border: none;
+	font-size: 15px;
+	width: 150px;
+	height: 31px;
+}
+#NewFolderBtn{
+	background-color: rgb(222, 222, 222);
+	color: black;
+}
+
+#NewScanBtn{
+	background-color: rgb(42, 99, 149);
+	color: rgb(255, 255, 255);
+}
+
+#LogedInUserBtn{
+	color:white;
+	border: none;
+	font-size: 12px;
+}
+
+#LogedUserBtn{
+	background-color: rgb(255, 255, 255);
+	background: url(png/profile-user_2.png) center center no-repeat;;
+	border: none;
+	height: 40px;
+	width: 40px;
+}
+
+							/* Buttons Events */
+
+#MyScansBtn:checked,
+#AllScansBtn:checked,
+#TrashBtn:checked,
+#MyAccountBtn:checked,
+#ThemeBtn:checked,
+#AboutBtn:checked {
+    border-left: 5px solid rgb(63, 174, 73);
+    background-color: rgb(222, 222, 222);
+    color: black;
+    height: 40px;
+    font-size: 15px;
+    text-align: left;
+    background-image: url('png/open-folder.png');
+    background-position: left center;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+}
+
+#TrashBtn:checked{
+    border-left: 5px solid rgb(63, 174, 73);
+    background-color: rgb(222, 222, 222);
+    color: black;
+    height: 40px;
+    font-size: 15px;
+    text-align: left;
+    background-image: url('png/trash.png');
+    background-position: left center;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+}
+
+#MyScansBtn:pressed,
+#AllScansBtn:pressed,
+#TrashBtn:pressed,
+#MyAccountBtn:pressed,
+#ThemeBtn:pressed,
+#AboutBtn:pressed {
+    text-align: left;
+    text-decoration: underline;
+}
+
+#MyScansBtn:hover,
+#AllScansBtn:hover,
+#TrashBtn:hover,
+#MyAccountBtn:hover,
+#ThemeBtn:hover,
+#AboutBtn:hover {
+    background-color: rgb(38, 55, 70);
+    color: rgb(255, 255, 255);
+}
+
+
+#SettingsTopBarBtn:pressed,
+#ScansTopBarBtn:pressed {
+    text-decoration: underline;
+}
+
+#SettingsTopBarBtn:hover,
+#ScansTopBarBtn:hover {
+	color: white;
+}
+
+#SettingsTopBarBtn:checked,
+#ScansTopBarBtn:checked {
+	font-weight: bold;
+	color: white;
+}
+
+
+#BackBtn:hover{
+	border: none;
+	text-align: left;
+	color: rgb(42, 99, 149);
+	text-decoration: underline;
+}
+
+
+#NewFolderBtn:hover{
+	background-color: rgb(197, 197, 197);
+}
+
+#NewScanBtn:hover{
+	background-color: rgb(27, 65, 98);
+}
+
+#LogedInUserBtn:hover{
+	text-decoration: underline;
+}
+
+
+#CreateNewScanBtn:hover{
+	text-decoration: underline;
+}
+
+#DeleteBtn:hover{
+	color: rgb(51, 51, 51);
+}
+
+#VulnBtn:hover{
+	text-decoration: underline;
+	color: rgb(38, 55, 70);
+}
+
+#NewPasswordInput:focus,#CurrentPasswordInput:focus,#EmailInput:focus,#FullNameInput:focus{
+	border: 1px solid rgb(166, 166, 166);	
+}
+
+
+
+#SaveSettingBtn:hover{
+	background-color: rgb(42, 99, 149);
+}
+
+#CancelSettingBtn:hover{
+	background-color: rgb(245, 245, 245);
+	color: rgb(0, 113, 185);
+}
+
+#SaveInputsBtn:hover{
+	background-color: rgb(42, 99, 149);
+	color: white;
+	border-radius: 3px;
+}
+
+#CanceInputsBtn:hover{
+	background-color: rgb(245, 245, 245);
+	color: rgb(0, 113, 185);
+	border-radius: 3px;
+}
