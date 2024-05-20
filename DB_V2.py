@@ -6,6 +6,65 @@ def create_connection():
 def craet_all_tables():
     create_table()
     create_table_of_Folders()
+    create_theme_table()
+
+def create_theme_table():
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    create_table_query = '''
+    CREATE TABLE IF NOT EXISTS Theme (
+        theme_name TEXT PRIMARY KEY
+    );
+    '''
+    cursor.execute(create_table_query)
+
+    conn.commit()
+    conn.close()
+
+def insert_theme_data(theme_name):
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    try:
+        # Delete existing data
+        delete_query = '''
+        DELETE FROM Theme
+        '''
+        cursor.execute(delete_query)
+
+        # Insert new data
+        insert_query = '''
+        INSERT INTO Theme (theme_name)
+        VALUES (?)
+        '''
+        cursor.execute(insert_query, (theme_name,))
+
+        conn.commit()
+    except sqlite3.Error as e:
+        print("Error inserting data:", e)
+    finally:
+        conn.close()
+
+def get_theme_data():
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    try:
+        select_query = '''
+        SELECT theme_name FROM Theme
+        '''
+        cursor.execute(select_query)
+        rows = cursor.fetchall()
+        
+        theme_names = [row[0] for row in rows]  # Extract theme names from the result
+        return theme_names[0]
+    except sqlite3.Error as e:
+        print("Error retrieving data:", e)
+        return None
+    finally:
+        conn.close()
+
 
 def create_table_of_Folders():
     conn = create_connection()
@@ -157,6 +216,12 @@ def rename_folder(old_folder_name, new_folder_name):
     cursor.execute("UPDATE folderNames SET folder_name=? WHERE folder_name=?", (new_folder_name, old_folder_name))
     conn.commit()
     conn.close()
+
+
+# insert_theme_data('Dark')
+
+# x = get_theme_data()
+# print(x)
 
 
 # print(get_data_by_folder_name("All"))

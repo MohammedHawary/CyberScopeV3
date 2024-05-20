@@ -2,7 +2,7 @@
 
 #SideBar{
 	background-color: rgb(55, 61, 71);
-	border-right: 2px solid rgb(77, 81, 91);
+	border-right: 2px solid rgb(74, 78, 88);
 }
 
 #TopBar{
@@ -15,14 +15,260 @@
 
 #UnderTopBar{
 	background-color: rgb(36, 45, 59);
-	border-bottom: 2px solid rgb(77, 81, 91);
+	border-bottom: 2px solid rgb(74, 78, 88);
 }
 
-#Pages{
+#BasicsSideBar{
 	background-color: rgb(36, 45, 59);
 }
 
+#SettingsTab {
+    background-color: rgb(36, 45, 59);
+}
+#InputsBar{
+	background-color:rgb(49, 58, 70);
+}
+
+#HostDetailsBar,#HostDetailsBar_2{
+	border-top: 1px solid rgb(77, 80, 90);
+}
+
+#ChartBar,#ChartBar_2{
+	border-top: 1px solid rgb(75, 79, 89);
+}
+
+#page,#page_2,#page_3,#page_4,#page_6,#page_5,#page_7,#page_8,#page_9{
+	background-color: rgb(36, 45, 59);
+}
+
+							/* Different Style */
+
+#VulnsWidget{
+	border: none;
+	background-color: rgb(36, 45, 59);
+}
+
+#VulnScrollArea{
+	border: none;
+	background-color: rgb(36, 45, 59);
+}
+
+#DarkThemeRadioButton{
+	font-size: 12px;
+	font-weight: bold;
+	color: 	white;
+}
+
+#Frame{
+	border: 2 dashed rgb(72, 76, 86);
+	border-radius: 9px;
+
+}
+
+#tab_7,#tab_8,#tab_9,#tab_10{
+	background-color: rgb(36, 45, 59);
+}
+
+QTabWidget#HostInDesailsWidget::pane {
+    border-left: 0; /* Hide the left border */
+    border-right: 0; /* Add a right border for balance */
+    border-top: 1px solid rgb(72, 76, 86); /* Add top border */
+    border-bottom: 0; /* Add bottom border */
+}
+
+#HostInDesailsTopWidget{
+	border: 1px solid rgb(72, 73, 80); height: 35px; background-color: rgb(72, 83, 98);font-size: 13px; font-weight: bold;color: white;
+}
+
+#HostInDesailsBottomWidget{
+	background-color: rgb(49, 58, 70);border: 1px solid rgb(72, 73, 80); height: 90px; font-size: 12px;font-weight:500; 
+}
+
+QTabWidget::pane {
+	border: 1px solid rgb(72, 76, 86);
+}
+
+QTabWidget#ScannersTemplates::pane {
+    border-left: 0; /* Hide the left border */
+    border-right: 0; /* Add a right border for balance */
+    border-top: 1px solid rgb(72, 76, 86); /* Add top border */
+    border-bottom: 0; /* Add bottom border */
+}
+
+QTabWidget#VulnerabilitiesBar::pane {
+    border-left: 0; /* Hide the left border */
+    border-right: 0; /* Add a right border for balance */
+    border-top: 1px solid rgb(72, 76, 86); /* Add top border */
+    border-bottom: 0; /* Add bottom border */
+}
+
+
+#ScannerPage{
+	background-color: rgb(36, 45, 59);
+}
+
+
+QTabBar::tab { 
+	background-color: rgb(72, 76, 86);
+	color: white;
+	border-left: 1px solid rgb(57, 65, 75);
+	border-right: 1px solid rgb(57, 65, 75);
+	border-top: 1px solid rgb(57, 65, 75);
+	border-bottom: 1px solid rgb(57, 65, 75);
+ 	font-size: 14px;
+	width: 130px;
+	height: 40px;
+}
+
+QTabBar::tab:selected { 
+ 	background-color: rgb(36, 45, 59);
+ 	border-bottom: none;
+ 	font-weight: bold;
+ 	font-size: 14px;
+ 	color: white; 
+ }
+
+
+#line{
+	color: rgb(77, 80, 90);
+}
+
+							/* Inputs Style */
+
+#OutputPlainTextEdit,#SoluPlainTextEdit,#ImpactsPlainTextEdit,#DescPlainTextEdit{
+	font-size: 12px;
+	border: none;
+	background-color: rgb(36, 45, 59);
+	color: white;
+}
+
+#NewPasswordInput,#CurrentPasswordInput,#EmailInput,#FullNameInput{
+	height: 30px;
+	font-size: 15px;
+	background-color: rgb(36, 45, 59);
+	color: white;
+	border: 1px solid rgb(108, 124, 146);
+}
+
+#NameInput,#DescriptionInput,#FolderInput,#TargetInput{
+	background-color: rgb(36, 45, 59);
+	border: 1px solid rgb(108, 124, 146);
+	font-size: 15px;
+	color: white;
+	height: 30px;
+}
+
+#SearchInput{
+	border: 1px solid rgb(108, 124, 146);
+	background-color: rgb(36, 45, 59);
+	color: white;
+	height: 25px;
+}
+
+
 							/* Labels Style */
+
+#InTheFutureLabel2,#InTheFutureLabel{
+	font-size: 80px;
+	font-weight: bold;
+	color: rgb(29, 210, 227);
+}
+
+#VulnNameLabel{
+	font-size: 20px;
+	color: white;
+}
+
+#label_30,#label_31,#label_32,#label_33,#label_35{
+	font-size: 20px;
+	font-weight: bold;
+	color: white;
+}
+
+#label_26{
+	font-size: 14px;
+	font-weight: bold;
+	color: white;
+}
+
+#label_7,#label_15,#label_16,#label_17,#label_18,#label_19,#label_20,#label_21{
+	color: black;
+	font-size: 14px;
+	color: white;
+}
+
+
+#label,#label_2,#label_3,#label_4{
+	font-size: 16px;
+	color: white;
+}
+
+#label_5,#label_6{
+	font-size: 16px;
+	font-weight: bold;
+	color: white;
+}
+
+
+#label_70,#label_71,#label_72,#label_73,#label_74,#label_75,#label_76,#label_77,#label_78,#label_79,#label_80,#label_81,#label_82,#label_83,#label_84,#label_85,#label_86,#label_87,#label_88,#label_89,#label_90,#label_91,#label_92,#label_93,#label_94,#label_95,#label_96,#label_97{
+	font-size: 12px;
+	color: white;
+}
+
+#label_23,#label_24,#label_25,#label_22{
+	font-size: 14px;
+	font-weight: bold;
+	color: white;
+}
+
+#HostLabel{
+	padding-left: 32px;
+	font-size: 12px;
+	color: white;
+}
+
+#VulnerabilitiesLabel{
+	font-size: 12px;
+	color: white;
+}
+
+#CriticalLabel{
+	background-color: rgb(145, 36, 62);
+	color: white;
+}
+#HighLabel{
+	background-color: rgb(221, 75, 80);
+	color: white;
+
+}
+#MediumLabel{
+	background-color: rgb(241, 140, 67);
+	color: white;
+
+}
+#LowLabel{
+	background-color: rgb(248, 200, 81);
+	color: white;
+}
+#InfoLabel{
+	background-color: rgb(103, 172, 225);
+	color: white;
+
+}
+
+
+#CriticalLabel,#HighLabel,#MediumLabel,#LowLabel,#InfoLabel{
+	font-weight: bold;
+}
+
+#SearchFindLabel{
+	color: rgb(178, 177, 177);
+}
+
+#NameInputLabel,#DescriptionInputLabel,#FolderInputLabel,#TargetInputLabel{
+	color: white;
+	font-size: 15px;
+}
 
 #CyberScopeLabel{
 	font-size: 30px;
@@ -36,24 +282,108 @@
 	text-align: left;
 }
 
-#LogedUserBtn,#LogedInUserLabel{
-
+#EmptyFolderLabel{
+	color: rgb(170, 170, 170);
+	border:none;
+	font-size: 17px;
 }
 
 #FoldersLabel{
 	border:none;
-	color: rgb(199, 203, 205);
+	padding-left: 15px;
+	padding-bottom: 10px;
+	color: rgb(218, 208, 204);
 	font-size: 12px;
 	text-align: left;
 
 }
-
 							/* Buttons Style */
 
-QPushButton{
+#SaveInputsBtn,#CanceInputsBtn{
+	width:110px;
+	height:30px;
+	font-size: 14px;
+}
+
+#SaveInputsBtn{
+	background-color: rgb(19, 114, 129);
+	border: 1px solid rgb(0, 165, 181);
+	color: white;
+	border-radius: 3px;
+}
+
+#CanceInputsBtn{
+	background-color: rgb(90, 93, 101);
+	color: white;
+	border-radius: 3px;
+}
+
+#SevBtn{
+	border-radius: 3px;
+	font-size: 12px;
+	width: 77px;
+	height: 22;
+	background-color: rgb(145, 36, 62);
 	color: white;
 }
 
+#CancelSettingBtn,#SaveSettingBtn{
+	height: 32px;
+	width: 80px;
+	font-size: 14px;
+	border: none;
+}
+
+#SaveSettingBtn{
+	background-color: rgb(19, 114, 129);
+	border: 1px solid rgb(0, 165, 181);
+	color: white;
+	border-radius: 3px;
+}
+
+#CancelSettingBtn{
+	background-color: rgb(90, 93, 101);
+	color: white;
+}
+
+#DeleteBtn{
+	color: rgb(255, 89, 89);
+	font-size: 15px;
+	font-weight: bold;
+	border: none;
+	width: 50px;
+}
+
+#VulnBtn{
+	border: none;
+	background-color: rgb(49, 58, 70);
+	font-size: 12px;
+	color: white;
+	text-align: left;
+}
+
+
+
+#BasicBtn,#AdvancedBtn,#AssessmentBtn{
+	border: none;
+	text-align: left;
+	border-bottom: 2 dotted rgb(72, 76, 86);
+	margin-bottom: 10px;
+	font-weight: bold;
+	font-size: 15px;
+	color: white;
+}
+
+QPushButton{
+	color: black;
+}
+
+#CreateNewScanBtn{
+	background-color: rgb(36, 45, 59);
+	color: rgb(29, 210, 227);
+	border: none;
+	font-size: 17px;
+}
 
 #BackBtn{
 	border: none;
@@ -68,6 +398,40 @@ QPushButton{
 	color: rgb(221, 221, 221);
 	width: 100px;
 	font-size: 20px;
+}
+
+
+#OWASPBtn1{
+    background-image: url('png/OWASP_TOP_10_145x145.png');
+    background-color: rgb(49, 58, 70);
+    height: 160px;
+    width: 250px;
+	border-top: 1px solid rgb(72, 76, 86);
+	border-left: 1px solid rgb(72, 76, 86);
+	border-right: 1px solid rgb(72, 76, 86);
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+#OWASPBtn2{
+    background-color: rgb(49, 58, 70);
+	color: white;
+	font-size: 14px;
+	font-weight: bold;
+	border-bottom: none;
+	border-top: none;
+	border-left: 1px solid rgb(72, 76, 86);
+	border-right: 1px solid rgb(72, 76, 86);
+}
+
+#OWASPBtn3{
+    background-color: rgb(49, 58, 70);
+	color: rgb(170, 170, 173);
+	border: none;
+	font-size: 12px;
+	border-left: 1px solid rgb(72, 76, 86);
+	border-right: 1px solid rgb(72, 76, 86);
+	border-bottom: 1px solid rgb(72, 76, 86);
 }
 
 
@@ -98,15 +462,15 @@ QPushButton{
 	font-size: 15px;
 	width: 150px;
 	height: 31px;
-	color: white;
 }
 #NewFolderBtn{
 	background-color: rgb(90, 93, 101);
+	color: white;
 }
 
 #NewScanBtn{
 	background-color: rgb(19, 114, 129);
-	border: 1px solid rgb(0, 165, 181);
+	color: white;
 }
 
 #LogedInUserBtn{
@@ -133,6 +497,7 @@ QPushButton{
 #AboutBtn:checked {
     border-left: 5px solid rgb(0, 131, 155);
     background-color: rgb(72, 76, 86);
+    color: rgb(29, 212, 228);
     height: 40px;
     font-size: 15px;
     text-align: left;
@@ -145,6 +510,7 @@ QPushButton{
 #TrashBtn:checked{
     border-left: 5px solid rgb(0, 131, 155);
     background-color: rgb(72, 76, 86);
+    color: rgb(29, 212, 228);
     height: 40px;
     font-size: 15px;
     text-align: left;
@@ -194,6 +560,7 @@ QPushButton{
 #BackBtn:hover{
 	border: none;
 	text-align: left;
+	color: rgb(29, 210, 227);
 	text-decoration: underline;
 }
 
@@ -208,4 +575,57 @@ QPushButton{
 
 #LogedInUserBtn:hover{
 	text-decoration: underline;
+}
+
+
+#CreateNewScanBtn:hover{
+	text-decoration: underline;
+}
+
+#DeleteBtn:hover{
+	color: rgb(255, 89, 89);
+}
+
+#VulnBtn:hover{
+	text-decoration: underline;
+	color: rgb(37, 210, 227);
+}
+
+#NameInput:focus,#DescriptionInput:focus,#FolderInput:focus,#TargetInput:focus{
+	border: 1px solid rgb(28, 210, 227);	
+}
+
+#NewPasswordInput:focus,#CurrentPasswordInput:focus,#EmailInput:focus,#FullNameInput:focus{
+	border: 1px solid rgb(28, 210, 227);	
+}
+
+#SearchInput:focus{
+	border: 1px solid rgb(28, 210, 227);	
+}
+
+#SaveSettingBtn:hover{
+	background-color: rgb(0, 165, 181);
+}
+
+#CancelSettingBtn:hover{
+	background-color: rgb(72, 83, 98);
+	color: white;
+}
+
+#SaveInputsBtn:hover{
+	background-color: rgb(0, 165, 181);
+	color: white;
+}
+
+#CanceInputsBtn:hover{
+	background-color: rgb(72, 83, 98);
+	color: white;
+}
+
+#FolderInput QAbstractItemView {
+    background-color: rgb(36, 45, 59); /* Change to desired color */
+	color: white;
+	min-height: 30px;
+    selection-background-color: rgb(72, 83, 98); /* Change to desired color for selected item */
+    height: 30px;
 }

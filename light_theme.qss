@@ -41,6 +41,17 @@
 
 							/* Different Style */
 
+#VulnsWidget{
+	border: none;
+	background-color: white;
+}
+
+#VulnScrollArea{
+	border: none;
+	background-color: white;
+}
+
+
 #DarkThemeRadioButton{
 	font-size: 12px;
 	font-weight: bold;
@@ -145,6 +156,12 @@ QTabBar::tab:selected {
 
 							/* Labels Style */
 
+#InTheFutureLabel2,#InTheFutureLabel{
+	font-size: 80px;
+	font-weight: bold;
+	color: rgb(29, 210, 227);
+}
+
 #VulnNameLabel{
 	font-size: 20px;
 }
@@ -181,7 +198,7 @@ QTabBar::tab:selected {
 }
 
 #label_23,#label_24,#label_25,#label_22{
-	font-size: 13px;
+	font-size: 14px;
 	font-weight: bold;
 }
 
