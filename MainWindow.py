@@ -1,7 +1,7 @@
 from PyQt5 import uic, QtWidgets
-from PyQt5.QtWidgets import QApplication, QInputDialog, QFrame, QSizePolicy, QSpacerItem, QMessageBox, QCheckBox, QRadioButton, QScrollArea, QComboBox, QToolButton, QTextEdit, QTabWidget, QDialog, QHBoxLayout, QMainWindow, QWidget, QLineEdit, QAction, QPushButton, QLabel, QVBoxLayout, QStackedWidget, QDesktopWidget, QGridLayout, QMenu, QPlainTextEdit, QTextBrowser
+from PyQt5.QtWidgets import QApplication, QInputDialog, QFrame, QSizePolicy,QToolTip, QSpacerItem, QMessageBox, QCheckBox, QRadioButton, QScrollArea, QComboBox, QToolButton, QTextEdit, QTabWidget, QDialog, QHBoxLayout, QMainWindow, QWidget, QLineEdit, QAction, QPushButton, QLabel, QVBoxLayout, QStackedWidget, QDesktopWidget, QGridLayout, QMenu, QPlainTextEdit, QTextBrowser
 from PyQt5.QtCore import QFile, QTextStream, Qt, QTimer, QCoreApplication, QMargins ,QSize, QEvent
-from PyQt5.QtGui import QIcon, QFont, QPainter, QColor, QPen, QTextCursor
+from PyQt5.QtGui import QIcon, QFont, QPainter, QColor, QPen, QTextCursor, QCursor
 from PyQt5.QtChart import QChart, QChartView, QPieSeries, QBarSet, QBarSeries, QLegend
 import re
 import DB_V2
@@ -132,10 +132,13 @@ class MainWindow(QMainWindow):
         self.gridLayout_2              = self.findChild(QGridLayout,     "gridLayout_2"             )
         self.gridLayout_48             = self.findChild(QGridLayout,     "gridLayout_48"            )
         self.gridLayout_64             = self.findChild(QGridLayout,     "gridLayout_64"            )
+        self.gridLayout_102            = self.findChild(QGridLayout,     "gridLayout_102"           )
+        self.gridLayout_103            = self.findChild(QGridLayout,     "gridLayout_103"           )
                             # QScrollArea
         self.ScrollArea                = self.findChild(QScrollArea,     "ScrollArea"               )
                             # QRadioButton
         self.DarkThemeRadioButton     = self.findChild(QRadioButton,     "DarkThemeRadioButton"     )
+        self.Last_back_and_text       = [] 
 
                             # ####################
                             #   Buttons Section  #
@@ -146,10 +149,15 @@ class MainWindow(QMainWindow):
         self.ScansTopBarBtn.clicked.connect(self.ScansTopBar)
         self.SettingsTopBarBtn.clicked.connect(self.SettingPage)
         self.LogedInUserBtn.clicked.connect(self.SettingPage)
+        self.LogedUserBtn.clicked.connect(self.SettingPage)
 
         self.MyAccountBtn.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(5))
         self.ThemeBtn.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(6))
         self.AboutBtn.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(7))
+
+
+
+        self.stackedWidget.currentChanged.connect(self.print_current_index)
 
         self.CreateNewScanBtn.clicked.connect(self.BackFunc)
         self.NewFolderBtn.clicked.connect(self.AddNewFolderWindow)
@@ -170,11 +178,9 @@ class MainWindow(QMainWindow):
 ##################################################################################################################
 ##################################################################################################################
                             # Chart section
-        chart_layout = QVBoxLayout(self.ChartBar)
-        self.circleChart(chart_layout, 25,10, 0, 0, 1)
+        self.circleChart(self.gridLayout_102, 25,10, 0, 0, 1)
 
-        chart_layout = QVBoxLayout(self.ChartBar_2)
-        self.circleChart(chart_layout, 25,10, 0, 0, 1)
+        self.circleChart(self.gridLayout_103, 25,10, 0, 0, 1)
 
         self.lineChart(25,10,0,0,1)
 
@@ -192,7 +198,24 @@ class MainWindow(QMainWindow):
         self.show()
         self.showMaximized()
 
+    def print_current_index(self, index):
+        all_buttons = self.SideBar.findChildren(QPushButton)
+        if index == 4:
+            for button in all_buttons:
+                if button.isChecked():
+                    self.BackBtn.setText(f'< Back to {button.text()}')
+                    self.BackBtn.clicked.connect(button.click)
+        if index == 8:
+            self.BackBtn.setText('< Back to Vulnerabilites')
+            self.BackBtn.clicked.connect(lambda: self.stackedWidget.setCurrentIndex(4))
+
+
     def DarkMode(self,btn=None):
+        all_buttons = self.VulnsWidget.findChildren(QPushButton)
+        all_label = self.VulnsWidget.findChildren(QLabel)
+        all_Widgets = self.VulnsWidget.findChildren(QWidget)
+        all_CheckBoxs = self.VulnsWidget.findChildren(QCheckBox)
+
         if btn:
             if btn.isChecked():
                 self.load_stylesheet("dark_theme.qss")
@@ -201,6 +224,59 @@ class MainWindow(QMainWindow):
                 print("btn from Dark")
                 self.system_theme = system_theme
                 self.addBtns(DB_V2.select_all_data(),"Dark")
+
+                self.access_grid_layout_elements(self.gridLayout_102)
+                self.access_grid_layout_elements(self.gridLayout_103)
+
+                self.NameInput.setStyleSheet('QLineEdit{border: 1px solid rgb(109, 125, 148);background-color: rgb(36, 45, 59);color: white;height: 30px;}QLineEdit:focus{border: 1px solid rgb(28, 210, 227);}')
+                self.TargetInput.setStyleSheet('border: 1px solid rgb(109, 125, 148);background-color: rgb(36, 45, 59);color: white;height: 30px;')
+
+# #################################################################
+                for widget in all_Widgets:
+                    if widget.objectName() == "TopWidget":
+                        widget.setStyleSheet('background-color: rgb(72, 83, 98); border: 1px solid rgb(72, 73, 80);')
+                        continue
+                    if widget.objectName() == "DownWidget":
+                        widget.setStyleSheet('background-color: rgb(49, 58, 70); border: 1px solid rgb(72, 73, 80); font-size: 13px; font-weight: bold')
+                        continue
+                    widget.setStyleSheet('background-color: rgb(36, 45, 59);font-size: 13px; font-weight: bold')
+
+                for button in all_buttons:
+                    if button.objectName() == "EditBtn":
+                        button.setStyleSheet('''
+                            QPushButton{
+                                border: none;
+                                background-color: rgb(72, 83, 98);
+                                font-size: 12px;
+                                color: white;
+                                text-align: left;
+                                }
+                            ''')
+                        continue
+                    button.setStyleSheet('''
+                    QPushButton{
+                        border: none;
+                        background-color: rgb(49, 58, 70);
+                        font-size: 12px;
+                        color: white;
+                        text-align: left;
+                        }
+                    QPushButton:hover{
+                        text-decoration: underline;
+                        color: rgb(37, 210, 227);
+                        }
+
+                        ''')
+
+                for CheckBox in all_CheckBoxs:
+                    CheckBox.setStyleSheet('border: none;')
+
+                for label in all_label:
+                    if label.objectName() == 'SevLabel':
+                        label.setStyleSheet('color: black;border: none;background-color: rgb(145, 36, 62); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
+                        continue
+
+                    label.setStyleSheet('color: white; border: none;font-size: 13px; font-weight: bold;')
                 return
             else:
                 self.load_stylesheet("light_theme.qss")
@@ -209,6 +285,47 @@ class MainWindow(QMainWindow):
                 print("btn from Light")
                 self.system_theme = system_theme
                 self.addBtns(DB_V2.select_all_data(),"Light")
+
+                self.access_grid_layout_elements(self.gridLayout_102)
+                self.access_grid_layout_elements(self.gridLayout_103)
+
+                self.NameInput.setStyleSheet('QLineEdit{border: 1px solid rgb(204, 204, 204);background-color: rgb(255,255,255);color: black;height: 30px;} QLineEdit:focus{border: 1px solid rgb(170, 170, 170);}')
+                self.TargetInput.setStyleSheet('QLineEdit{border: 1px solid rgb(204, 204, 204);background-color: white;color: black;height: 30px;} QLineEdit:focus{border: 1px solid rgb(170, 170, 170);}')
+
+# #################################################################
+                for widget in all_Widgets:
+                    if widget.objectName() == "TopWidget":
+                        widget.setStyleSheet('background-color: rgb(245, 245, 245); border: 1px solid rgb(221, 221, 221);')
+                        continue
+                    if widget.objectName() == "DownWidget":
+                        widget.setStyleSheet('background-color: white; border: 1px solid rgb(221, 221, 221);font-size: 13px; font-weight: normal;')
+                        continue
+                    widget.setStyleSheet('background-color: white;font-size: 13px; font-weight: bold;')
+
+                for button in all_buttons:
+                    if button.objectName() == "EditVulnBtn":
+                        button.setStyleSheet('''
+                            QPushButton{
+                                border: none;
+                                background-color: rgb(245, 245, 245);
+                                font-size: 12px;
+                                color: rgb(245, 245, 245);
+                                text-align: left;
+                                }
+                            ''')
+                        continue
+                    button.setStyleSheet('QPushButton{border:none; text-align: left;background-color white; color: black;} QPushButton:hover{text-decoration: underline; color: rgb(56, 109, 156);}')
+
+
+                for CheckBox in all_CheckBoxs:
+                    CheckBox.setStyleSheet('border: none;')
+
+
+                for label in all_label:
+                    if label.objectName() == 'SevLabel':
+                        label.setStyleSheet('color: black;border: none;background-color: rgb(145, 36, 62); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
+                        continue
+                    label.setStyleSheet('color: black; border: none;font-size: 13px;')
                 return
 
         system_theme = self.get_windows_theme()
@@ -218,20 +335,36 @@ class MainWindow(QMainWindow):
                 self.load_stylesheet("light_theme.qss")
                 system_theme = Theme
                 print("Light From DB")
+
+                self.access_grid_layout_elements(self.gridLayout_102)
+                self.access_grid_layout_elements(self.gridLayout_103)
+
                 return system_theme
             else:
                 self.load_stylesheet("dark_theme.qss")
                 self.DarkThemeRadioButton.setChecked(1)
                 system_theme = Theme
                 print("Dark From DB")
+
+                self.access_grid_layout_elements(self.gridLayout_102)
+                self.access_grid_layout_elements(self.gridLayout_103)
+
                 return system_theme
 
         if system_theme == "Light":
             self.load_stylesheet("light_theme.qss")
+
+            self.access_grid_layout_elements(self.gridLayout_102)
+            self.access_grid_layout_elements(self.gridLayout_103)
+
             return system_theme
         else:
             self.load_stylesheet("dark_theme.qss")
             self.DarkThemeRadioButton.setChecked(1)
+
+            self.access_grid_layout_elements(self.gridLayout_102)
+            self.access_grid_layout_elements(self.gridLayout_103)
+
             return system_theme
 
     def BackFunc(self):
@@ -249,6 +382,7 @@ class MainWindow(QMainWindow):
                     self.BackBtn.setText(f'< Back To {button.objectName()}')
 
                 self.stackedWidget.setCurrentIndex(1)
+                self.FolderInput.clear()
                 self.MyScansLabel.setText("Scan Templates")
                 self.BackBtn.clicked.connect(button.click)
 
@@ -288,55 +422,114 @@ class MainWindow(QMainWindow):
         self.gridLayout_48.setColumnStretch(3,low)
         self.gridLayout_48.setColumnStretch(4,info)
 
+    def get_pie_series(self, chart):
+        for series in chart.series():
+            if isinstance(series, QPieSeries):
+                if series.objectName() == 'center_slice':
+                    return series.slices()
+        return None
+
+    def access_grid_layout_elements(self, target_layout):
+        rows = target_layout.rowCount()
+        cols = target_layout.columnCount()
+
+        for row in range(rows):
+            for col in range(cols):
+                item = target_layout.itemAtPosition(row, col)
+                if item is not None:
+                    widget = item.widget()
+                    if isinstance(widget, QChartView):
+                        chart = widget.chart()
+                        center_slice = self.get_pie_series(chart)
+
+                        if self.system_theme == "Light":
+                            center_slice[0].setBrush(QColor(255,255,255))
+                            center_slice[0].setBorderColor(QColor(255,255,255))
+
+                            widget.setStyleSheet('background-color: white;')
+                            chart.setBackgroundBrush(QColor(255,255,255))
+                        else:
+                            center_slice[0].setBrush(QColor(36, 45, 59))
+                            center_slice[0].setBorderColor(QColor(36, 45, 59))
+                            widget.setStyleSheet('background-color: rgb(36, 45, 59); color: red;')
+                            chart.setBackgroundBrush(QColor(36, 45, 59))
+                    elif widget:
+                        if hasattr(widget, 'text'):
+                            print(f"Widget at ({row}, {col}): {widget.text()}")
+
     def circleChart(self, target_layout, info, low, medium, high, critical):
-        series = QPieSeries()
-        slice1 = series.append("Critical", critical)
-        slice2 = series.append("High", high)
-        slice3 = series.append("Medium", medium)
-        slice4 = series.append("Low", low)
-        slice5 = series.append("Info", info)
+        self.series = QPieSeries()
+        self.slice1 = self.series.append("Critical", critical)
+        self.slice2 = self.series.append("High", high)
+        self.slice3 = self.series.append("Medium", medium)
+        self.slice4 = self.series.append("Low", low)
+        self.slice5 = self.series.append("Info", info)
 
-        slice1.setBrush(QColor(145, 36, 62))
-        slice2.setBrush(QColor(221, 75, 80))
-        slice3.setBrush(QColor(241, 140, 67))
-        slice4.setBrush(QColor(248, 200, 81))
-        slice5.setBrush(QColor(103, 172, 225))
+        self.slice1.setBrush(QColor(145, 36, 62))
+        self.slice2.setBrush(QColor(221, 75, 80))
+        self.slice3.setBrush(QColor(241, 140, 67))
+        self.slice4.setBrush(QColor(248, 200, 81))
+        self.slice5.setBrush(QColor(103, 172, 225))
 
-        chart = QChart()
-        chart.addSeries(series)
-        chart.setAnimationOptions(QChart.SeriesAnimations)
-        chart.legend().setAlignment(Qt.AlignRight)
+        self.slice1.setBorderWidth(2)  # Remove the border
+        self.slice2.setBorderWidth(2)  # Remove the border
+        self.slice3.setBorderWidth(2)  # Remove the border
+        self.slice4.setBorderWidth(2)  # Remove the border
+        self.slice5.setBorderWidth(2)  # Remove the border
 
-        font = chart.legend().font()
+
+        self.slice1.setBorderColor(QColor(145, 36, 62))
+        self.slice2.setBorderColor(QColor(221, 75, 80))
+        self.slice3.setBorderColor(QColor(241, 140, 67))
+        self.slice4.setBorderColor(QColor(248, 200, 81))
+        self.slice5.setBorderColor(QColor(103, 172, 225))
+
+        self.chart = QChart()
+        self.chart.addSeries(self.series)
+        self.chart.setAnimationOptions(QChart.SeriesAnimations)
+        self.chart.legend().setAlignment(Qt.AlignRight)
+
+        font = self.chart.legend().font()
         font.setPointSize(12)
-        chart.legend().setFont(font)
-
-        chart.legend().setMarkerShape(QLegend.MarkerShapeCircle)
-
-        center_series = QPieSeries()
-        center_slice = center_series.append('', 100)
-        center_slice.setBrush(QColor(36, 45, 59))
-        center_series.setPieSize(0.38)  
+        self.chart.legend().setFont(font)
 
 
-        chart.addSeries(center_series)
-        chartview = QChartView(chart)
-        chartview.setRenderHint(QPainter.Antialiasing)
-        if self.system_theme == "Light":
-            center_slice.setBrush(QColor(255,255,255))
-            chartview.setStyleSheet('background-color: white;')
-            chart.setBackgroundBrush(QColor("white"))
-        else:
-            center_slice.setBrush(QColor(36, 45, 59))
-            chartview.setStyleSheet('background-color: rgb(36, 45, 59); color: red;')
-            chart.setBackgroundBrush(QColor(36, 45, 59))
-        chart.setMargins(QMargins(0, 0, 0, 0))
+        self.chart.legend().setMarkerShape(QLegend.MarkerShapeCircle)
 
-        chartview.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        chartview.setMaximumSize(350, 250)  
-        chartview.setMinimumSize(350,250)  
 
-        target_layout.addWidget(chartview)
+        # Center series (inner circle)
+        self.center_series = QPieSeries()
+        self.center_series.setObjectName('center_slice')
+        self.center_slice = self.center_series.append('', 100)
+        self.center_slice.setBrush(QColor(255,255,255))
+        self.center_slice.setBorderWidth(2)  # Remove the border
+        self.center_slice.setBorderColor(QColor(255,255,255))  # Set the border color to red
+
+        # Adjust pie size to ensure proper coverage
+        self.center_series.setPieSize(0.38)
+
+        self.chart.addSeries(self.center_series)
+        self.chartview = QChartView(self.chart)
+        self.chartview.setRenderHint(QPainter.Antialiasing)
+        self.chart.setMargins(QMargins(0, 0, 0, 0))
+
+        self.chartview.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.chartview.setMaximumSize(350, 250)
+        self.chartview.setMinimumSize(350, 250)
+
+        self.chartview.setStyleSheet('background-color: white;')
+
+        target_layout.addWidget(self.chartview)
+
+        self.DarkMode()
+
+        self.series.hovered.connect(self.showPercentage)
+
+    def showPercentage(self, slice, state):
+        if state:  # If hovered
+            total = sum([s.value() for s in self.series.slices()])
+            percentage = (slice.value() / total) * 100
+            QToolTip.showText(QCursor.pos(), f'{percentage:.2f}%')
 
     def hide_if_zero(self, label, num):
         if num == 0:
@@ -623,96 +816,7 @@ class MainWindow(QMainWindow):
         return super().eventFilter(source, event)
 
     def create_table_scans_for_vulnerability(self):
-        # all_buttons = self.VulnsWidget.findChildren(QPushButton)
-        # all_label = self.VulnsWidget.findChildren(QLabel)
-        # all_Widgets = self.VulnsWidget.findChildren(QWidget)
-        # x = 0
-        # y = 0
-        # for widget in all_Widgets:
-        #     print(widget.objectName())
-        #     if self.system_theme == "Dark":
-        #         if widget.objectName() == "TopWidget":
-        #             widget.setStyleSheet('background-color: rgb(72, 83, 98);')
-        #             continue
-        #         if widget.objectName() == "VulnsWidget":
-        #             widget.setStyleSheet('background-color: red;')
-        #             continue                    
-        #         widget.setStyleSheet('background-color: rgb(49, 58, 70);')
-        #     else:
-        #         if widget.objectName() == "TopWidget":
-        #             widget.setStyleSheet('background-color: rgb(245, 245, 245);')
-        #         elif widget.objectName() == "VulnsWidget":
-        #             widget.setStyleSheet('background-color: rgb(36, 45, 59);')
-        #         else:
-        #             widget.setStyleSheet('background-color: white;')
-
-        # for button in all_buttons:
-        #     if self.system_theme == "Dark":
-        #         if button.objectName() == "EditBtn":
-        #             button.setStyleSheet('''
-        #                 QPushButton{
-        #                     border: none;
-        #                     background-color: rgb(72, 83, 98);
-        #                     font-size: 12px;
-        #                     color: white;
-        #                     text-align: left;
-        #                     }
-        #                 ''')
-        #             continue
-        #         button.setStyleSheet('''
-        #         QPushButton{
-        #             border: none;
-        #             background-color: rgb(49, 58, 70);
-        #             font-size: 12px;
-        #             color: white;
-        #             text-align: left;
-        #             }
-        #         QPushButton:hover{
-        #             text-decoration: underline;
-        #             color: rgb(37, 210, 227);
-        #             }
-
-        #             ''')
-        #     else:
-        #         if button.objectName() == "EditBtn":
-        #             button.setStyleSheet('''
-        #                 QPushButton{
-        #                     border: none;
-        #                     background-color: rgb(72, 83, 98);
-        #                     font-size: 12px;
-        #                     color: white;
-        #                     text-align: left;
-        #                     }
-        #                 ''')
-        #             continue
-        #         button.setStyleSheet('''
-        #         QPushButton{
-        #             border: none;
-        #             background-color: rgb(49, 58, 70);
-        #             font-size: 12px;
-        #             color: white;
-        #             text-align: left;
-        #             }
-        #         QPushButton:hover{
-        #             text-decoration: underline;
-        #             color: rgb(37, 210, 227);
-        #             }
-
-        #             ''')
-
-        #     x = 1
-        # for label in all_label:
-        #     if self.system_theme == "Dark":
-        #         pass
-        #     if label.objectName() == "SevLabel":
-        #         # label.setStyleSheet('''color: black;border: none;background-color: rgb(145, 36, 62); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;''')
-        #         label.setStyleSheet('color: black;border: none;background-color: rgb(145, 36, 62); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
-        #         continue
-        #     label.setStyleSheet('''color: white;border: none;''')
-        #     y = 1
-
-        # if x or y:
-        #     return
+        spacer = QSpacerItem(20, 40, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
 
         ParentLayout = QGridLayout()         #######> this is the main layout that all windget inside it 
         MainVLayout = QVBoxLayout()  # create virtival layout to add all widget virticaly and set it as main layout for main widget 
@@ -722,21 +826,31 @@ class MainWindow(QMainWindow):
         HLayout = QHBoxLayout()
         CheckBox = QCheckBox()
         SevLabel = QLabel("Sev")
+        SevLabel.setFixedSize(57, 22)
+        SevLabel.setAlignment(Qt.AlignCenter)
+
         SevLabel.setStyleSheet('border: none; ')
+        CheckBox.setStyleSheet('border: none; ')
 
-
+        HLayout.addWidget(CheckBox)
         HLayout.addWidget(SevLabel)
+
+        HLayout.addItem(spacer)
+        HLayout.setStretch(0,0)
+        HLayout.setStretch(1,1)
+        HLayout.setSpacing(20)
+
+
 
 
         HLayout2 = QHBoxLayout()
-        NameLabel = QLabel("  Name")
+        NameLabel = QLabel("Name")
         NameLabel.setStyleSheet('border: none; ')
         HLayout2.addWidget(NameLabel)
-        HLayout2.setSpacing(20)
 
 
         HLayout3 = QHBoxLayout()
-        FamilyLabel = QLabel(" Family")
+        FamilyLabel = QLabel("Family")
         FamilyLabel.setStyleSheet('border: none; ')
         HLayout3.addWidget(FamilyLabel)
 
@@ -747,7 +861,7 @@ class MainWindow(QMainWindow):
 
 
         HLayout5 = QHBoxLayout()
-        EditBtn = QPushButton()
+        EditBtn  = QPushButton()
         EditBtn.setObjectName('EditBtn')
         EditBtn.setIcon(QIcon('png/cogwheel.png'))
         EditBtn.setIconSize(QSize(18, 18))
@@ -755,9 +869,14 @@ class MainWindow(QMainWindow):
         EditBtn.setStyleSheet('border: none;')
         HLayout5.addWidget(EditBtn)
 
+        EditBtn.setStyleSheet('''
+            QPushButton:hover{border:none; font-size: 25px; margin-left: 40px;color: rgb(165, 165, 165);}
+            QPushButton{border:none; font-size: 25px; margin-left: 40px;color: rgb(217, 217, 217);}
+            ''')
+
 
         MainLayout = QGridLayout()
-        MainLayout.setContentsMargins(65, 0, 17, 0)
+        # MainLayout.setContentsMargins(10, 0, 20, 0)
 
         MainLayout.addLayout(HLayout , 0, 0)
         MainLayout.addLayout(HLayout2, 0, 1)
@@ -765,35 +884,36 @@ class MainWindow(QMainWindow):
         MainLayout.addLayout(HLayout4, 0, 3)
         MainLayout.addLayout(HLayout5, 0, 4)
 
-        MainLayout.setColumnStretch(0, 2)
-        MainLayout.setColumnStretch(1, 8)
-        MainLayout.setColumnStretch(2, 8)
+        MainLayout.setColumnStretch(0, 5)
+        MainLayout.setColumnStretch(1, 12)
+        MainLayout.setColumnStretch(2, 13)
         MainLayout.setColumnStretch(3, 4)
-        MainLayout.setColumnStretch(4, 0)
-        self.Widget2 = QWidget(self)
-        self.Widget2.setObjectName("TopWidget")
+        MainLayout.setColumnStretch(4, 1)
+
+
+        self.Widget1 = QWidget(self)
+        self.Widget1.setObjectName("TopWidget")
         if self.system_theme == "Light":
-            self.Widget2.setStyleSheet("border: 1px solid rgb(221, 221, 221); background-color: rgb(245, 245, 245);font-size: 13px; font-weight: bold;")
+            self.Widget1.setStyleSheet("border: 1px solid rgb(221, 221, 221); background-color: rgb(245, 245, 245);font-size: 13px; font-weight: bold;")
             SevLabel.setStyleSheet('color: black;border: none;')
             NameLabel.setStyleSheet('color: black;border: none;')
             FamilyLabel.setStyleSheet('color: black;border: none;')
-            CountLabel.setStyleSheet('color: black;')
+            CountLabel.setStyleSheet('color: black;border: none;')
         else:
             SevLabel.setStyleSheet('color: white;border: none;')
             NameLabel.setStyleSheet('color: white;border: none;')
             FamilyLabel.setStyleSheet('color: white;border: none;')
             CountLabel.setStyleSheet('color: white;border: none;')
-            self.Widget2.setStyleSheet("border: 1px solid rgb(72, 73, 80); background-color: rgb(72, 83, 98);font-size: 13px; font-weight: bold;")
+            self.Widget1.setStyleSheet("border: 1px solid rgb(72, 73, 80); background-color: rgb(72, 83, 98);font-size: 13px; font-weight: bold;")
 
-        self.Widget2.setMinimumHeight(37)
-        self.Widget2.setMaximumHeight(37)
+        self.Widget1.setMinimumHeight(37)
+        self.Widget1.setMaximumHeight(37)
 
-        self.Widget2.setLayout(MainLayout)  # set layout of Widget2 with his elements
+        self.Widget1.setLayout(MainLayout)  # set layout of Widget1 with his elements
 
         MainVLayout.addLayout(ParentLayout)
-        MainVLayout.addWidget(self.Widget2)
+        MainVLayout.addWidget(self.Widget1)
         MainVLayout.setContentsMargins(0,9,0,0)
-        spacer = QSpacerItem(20, 40, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
 
         for i in range(2):
             SevLayout = QHBoxLayout()
@@ -833,6 +953,7 @@ class MainWindow(QMainWindow):
             BtnsLayout = QHBoxLayout()
 
             EditVulnBtn = QPushButton()
+            EditVulnBtn.setObjectName('EditVulnBtn')
             EditVulnBtn.setIcon(QIcon('png/pen.png'))
             EditVulnBtn.setIconSize(QSize(18, 18))  # Set the size of the icon (optional)
 
@@ -850,15 +971,15 @@ class MainWindow(QMainWindow):
 
 
             MainLayout = QGridLayout()
-            MainLayout.setContentsMargins(10, 0, 20, 0)
+            # MainLayout.setContentsMargins(10, 0, 20, 0)
 
 
 
-            MainLayout.addLayout(SevLayout, 0, 0)
-            MainLayout.addLayout(VulNameLayout, 0, 1)
-            MainLayout.addLayout(VulnFamilyLayout, 0, 2)
-            MainLayout.addLayout(VulnCountLayout, 0, 3)
-            MainLayout.addLayout(BtnsLayout, 0, 4)
+            MainLayout.addLayout(SevLayout       ,0, 0)
+            MainLayout.addLayout(VulNameLayout   ,0, 1)
+            MainLayout.addLayout(VulnFamilyLayout,0, 2)
+            MainLayout.addLayout(VulnCountLayout ,0, 3)
+            MainLayout.addLayout(BtnsLayout      ,0, 4)
 
 
             MainLayout.setColumnStretch(0, 5)
@@ -868,19 +989,19 @@ class MainWindow(QMainWindow):
             MainLayout.setColumnStretch(4, 1)
 
             self.Widget2 = QWidget(self)
-
+            self.Widget2.setObjectName("DownWidget")
             if self.system_theme == "Light":
                 VulnNameBtn.setStyleSheet('QPushButton{border:none; text-align: left;background-color white; color: black;} QPushButton:hover{text-decoration: underline; color: rgb(56, 109, 156);}')
                 SevLabel.setStyleSheet('color: black;border: none;background-color: rgb(145, 36, 62); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
                 VulnFamilyLabel.setStyleSheet('color: black;border: none;font-weight: normal;')
-                VulnCountLabel.setStyleSheet('color: black;')
-                self.Widget2.setStyleSheet("border: 1px solid rgb(221, 221, 221); background-color: rgb(245, 245, 245);font-size: 13px; font-weight: bold;")
+                VulnCountLabel.setStyleSheet('color: black;border: none; text-align: center;')
+                self.Widget2.setStyleSheet("border: 1px solid rgb(221, 221, 221); background-color: white;font-size: 13px;")
             else:
                 VulnNameBtn.setStyleSheet('QPushButton{border:none; text-align: left;background-color rgb(48, 57, 69); color: white;} QPushButton:hover{text-decoration: underline; color: rgb(56, 109, 156);}')
                 SevLabel.setStyleSheet('color: black;border: none;background-color: rgb(145, 36, 62); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
                 VulnFamilyLabel.setStyleSheet('color: white;border: none;')
-                VulnCountLabel.setStyleSheet('color: white;border: none;')
-                self.Widget2.setStyleSheet("border: 1px solid rgb(72, 73, 80); background-color: rgb(48, 57, 69);font-size: 13px; font-weight: bold;")
+                VulnCountLabel.setStyleSheet('color: white;border: none; text-align: center;')
+                self.Widget2.setStyleSheet("border: 1px solid rgb(72, 73, 80); background-color: rgb(48, 57, 69);font-size: 13px;")
 
 
             self.Widget2.setMinimumHeight(48)
@@ -916,7 +1037,7 @@ class MainWindow(QMainWindow):
 
 
         HLayout2 = QHBoxLayout()
-        self.LastModifyLabel = QLabel("Last Modify")
+        self.LastModifyLabel = QLabel("        Last Modify")
         HLayout2.addWidget(self.LastModifyLabel)
 
 
@@ -924,16 +1045,30 @@ class MainWindow(QMainWindow):
         self.ScheduleLabel = QLabel("Schedule")
         HLayout3.addWidget(self.ScheduleLabel)
 
+
+        BtnsLayout = QHBoxLayout()
+
+        self.RunScanBtn = QPushButton("►")
+        self.CancelScanBtn = QPushButton("X")
+        font = QFont("Sitka Subheading Semibold")
+        self.CancelScanBtn.setFont(font)
+
+        BtnsLayout.addWidget(self.RunScanBtn)
+        BtnsLayout.addWidget(self.CancelScanBtn)
+
+
+
         MainLayout = QGridLayout()
-        MainLayout.setContentsMargins(10, 0, 100, 0)
+        MainLayout.setContentsMargins(10, 0, 20, 0)
 
-        MainLayout.addLayout(HLayout, 0, 0)
-        MainLayout.addLayout(HLayout3, 0, 1)
-        MainLayout.addLayout(HLayout2, 0, 2)
+        MainLayout.addLayout(HLayout,    0, 0)
+        MainLayout.addLayout(HLayout3,   0, 1)
+        MainLayout.addLayout(HLayout2,   0, 2)
+        MainLayout.addLayout(BtnsLayout, 0, 3)
 
-        MainLayout.setColumnStretch(0, 3)
-        MainLayout.setColumnStretch(1, 3)
-        MainLayout.setColumnStretch(2, 1)
+        MainLayout.setColumnStretch(0, 4)
+        MainLayout.setColumnStretch(1, 4)
+        MainLayout.setColumnStretch(2, 2)
 
         self.Widget2 = QWidget(self)
         self.Widget2.setMinimumHeight(37)
@@ -946,6 +1081,13 @@ class MainWindow(QMainWindow):
             self.NameLabel.setStyleSheet('border-left: none;border-right: none;color; black; ')
             self.LastModifyLabel.setStyleSheet('border-left: none;border-right: none;color; black; ')
             self.ScheduleLabel.setStyleSheet('border-left: none;border-right: none;color; black; ')
+            self.CancelScanBtn.setStyleSheet('''
+                QPushButton{border-left: none;border-right: none; font-size: 25px; margin-left: 40px;color: rgb(245, 245, 245);}
+                ''')
+            self.RunScanBtn.setStyleSheet("""
+                QPushButton {border-left: none;border-right: none; font-size: 17px;color: rgb(245, 245, 245); margin-left: 52px;width: 40px;}
+                """)
+
         else:
             self.Widget2.setStyleSheet(f'background-color: rgb(72, 83, 98); color: rgb(216, 222, 233);')
             self.Widget2.setStyleSheet("border: 1px solid rgb(74, 78, 88); height: 35px; background-color: rgb(72, 83, 98);font-size: 13px; font-weight: bold;")
@@ -954,6 +1096,12 @@ class MainWindow(QMainWindow):
             self.NameLabel.setStyleSheet('QLabel{border-left: none;border-right: none;color: rgb(216, 222, 233);} ')
             self.LastModifyLabel.setStyleSheet('border-left: none;border-right: none; color: rgb(216, 222, 233); ')
             self.ScheduleLabel.setStyleSheet('border-left: none;border-right: none; color: rgb(216, 222, 233);')
+            self.CancelScanBtn.setStyleSheet('''
+                QPushButton{border-left: none;border-right: none; font-size: 25px; margin-left: 40px;color: rgb(72, 83, 98);}
+                ''')
+            self.RunScanBtn.setStyleSheet("""
+                QPushButton {border-left: none;border-right: none; font-size: 17px;color: rgb(72, 83, 98); margin-left: 52px;width: 40px;}
+                """)
 
 
         self.Widget2.setLayout(MainLayout)  # set layout of Widget2 with his elements
@@ -985,13 +1133,13 @@ class MainWindow(QMainWindow):
 
 
             LastModifyLayout = QHBoxLayout()
-            self.LabelText = f'<span style="font-weight:600; display:inline-block; white-space:nowrap;font-size: 20px; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🗸</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:600; font-size: 13px;">{i[3]}</span>'
+            self.LabelText = f'<span style=" display:inline-block; white-space:nowrap;font-size: 20px; ">🗸</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style=" font-size: 13px;">{i[3]}</span>'
             self.LastModifyLabel = QLabel(f"{self.LabelText}")
             LastModifyLayout.addWidget(self.LastModifyLabel)
 
 
             ScheduleLayout = QHBoxLayout()
-            self.ScheduleLabel = QLabel(f"       {i[2]}")
+            self.ScheduleLabel = QLabel(f"{i[2]}")
             ScheduleLayout.addWidget(self.ScheduleLabel)
 
 
@@ -1016,15 +1164,15 @@ class MainWindow(QMainWindow):
 
 
 
-            MainLayout.addLayout(NameLayout, 0, 0)
-            MainLayout.addLayout(ScheduleLayout, 0, 1)
+            MainLayout.addLayout(NameLayout      , 0, 0)
+            MainLayout.addLayout(ScheduleLayout  , 0, 1)
             MainLayout.addLayout(LastModifyLayout, 0, 2)
-            MainLayout.addLayout(BtnsLayout, 0, 3)
+            MainLayout.addLayout(BtnsLayout      , 0, 3)
 
 
-            MainLayout.setColumnStretch(0, 3)
-            MainLayout.setColumnStretch(1, 3)
-            MainLayout.setColumnStretch(2, 1)
+            MainLayout.setColumnStretch(0, 4)
+            MainLayout.setColumnStretch(1, 4)
+            MainLayout.setColumnStretch(2, 2)
 
 
             self.Widget2 = QWidget(self)
@@ -1037,7 +1185,7 @@ class MainWindow(QMainWindow):
                     QPushButton:hover{text-decoration: underline; color: rgb(56, 109, 156);}
                     ''')
                 self.LastModifyLabel.setStyleSheet('border-left: none;border-right: none; color: black;')
-                self.ScheduleLabel.setStyleSheet('border-left: none;border-right: none;text-align: center;color: black; ')
+                self.ScheduleLabel.setStyleSheet('border-left: none;border-right: none;color: black; ')
                 self.CancelScanBtn.setStyleSheet('''
                     QPushButton:hover{border-left: none;border-right: none; font-size: 25px; margin-left: 40px;color: rgb(165, 165, 165);}
                     QPushButton{border-left: none;border-right: none; font-size: 25px; margin-left: 40px;color: rgb(217, 217, 217);}
@@ -1046,7 +1194,7 @@ class MainWindow(QMainWindow):
                     QPushButton:hover{border-left: none;border-right: none; font-size: 17px;color: rgb(165, 165, 165); margin-left: 52px;}
                     QPushButton {border-left: none;border-right: none; font-size: 17px;color: rgb(217, 217, 217); margin-left: 52px;width: 40px;}
                     """)
-                self.Widget2.setStyleSheet("background-color: white;border: 1px solid rgb(221, 221, 221); height: 60px; font-size: 12px;font-weight:500; ")
+                self.Widget2.setStyleSheet("background-color: white;border: 1px solid rgb(221, 221, 221); height: 60px; font-size: 12px; ")
             else:
                 self.ChildCheckBox.setStyleSheet('border-left: none;border-right: none; ')
                 self.NameBtn.setStyleSheet('''
@@ -1054,7 +1202,7 @@ class MainWindow(QMainWindow):
                     QPushButton:hover{text-decoration: underline; color: rgb(37, 210, 227);}
                     ''')
                 self.LastModifyLabel.setStyleSheet('border-left: none;border-right: none;  color:  White;')
-                self.ScheduleLabel.setStyleSheet('border-left: none;border-right: none;text-align: center;  color:  White;')
+                self.ScheduleLabel.setStyleSheet('border-left: none;border-right: none;  color:  White;')
                 self.CancelScanBtn.setStyleSheet('''
                     QPushButton{border-left: none;border-right: none; font-size: 25px; margin-left: 40px;color: rgb(255, 89, 89);}
                     QPushButton:hover{color:rgb(153, 0, 0);}
@@ -1063,7 +1211,7 @@ class MainWindow(QMainWindow):
                 self.RunScanBtn.setStyleSheet("""
                     QPushButton {border-left: none;border-right: none; font-size: 17px;color: rgb(217, 217, 217); margin-left: 52px;width: 40px;}
                     """)
-                self.Widget2.setStyleSheet("background-color: rgb(49, 58, 70);border: 1px solid rgb(77, 80, 90); height: 60px; font-size: 12px;font-weight:500; ")
+                self.Widget2.setStyleSheet("background-color: rgb(49, 58, 70);border: 1px solid rgb(77, 80, 90); height: 60px; font-size: 12px; ")
 
 
 
@@ -1077,6 +1225,8 @@ class MainWindow(QMainWindow):
         self.MainWidget = QWidget(self) # Create Main widget 
         spacer = QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         MainVLayout.addItem(spacer)
+        MainVLayout.setContentsMargins(0,0,20,0)
+
         self.MainWidget.setLayout(MainVLayout) # add the main Virtical layout that contain all widget with his elements 
 
         self.ScrollArea.setWidget(self.MainWidget)
@@ -1110,22 +1260,15 @@ class MainWindow(QMainWindow):
                     self.BackBtn.setText(f'< Back To {button.objectName()}')
 
                 self.BackBtn.clicked.connect(button.click)
-        # self.ScanDetails_Name_label.setText(btn.text())
-        # self.ScanDetails_Status_label.setText("Completed")
-        # self.ScanDetails_Policy_label.setText("Web Alication Test")
-        # self.ScanDetails_Scanner_label.setText("Local Scan")
 
     def show_vuln_info(self, VulnName):
         self.stackedWidget.setCurrentIndex(8)
-
         self.SeeAlLabel.setText("&nbsp;&nbsp;&nbsp;<a href='http://www.example.com'>Click me to open link</a>")
         self.SeeAlLabel.setOpenExternalLinks(True)
 
-        import sys
-        sys.path.append('../Vulnerabilites Scripts')
         import Forms_of_vuln
 
-        VulnName, VulnSev, VulnDescriptionForm, VulnImpactesForm, VulnSoluationForm, VulnSeeAlsoForm, VulnOutputForm = Forms_of_vuln.SSL_TLS_Form()
+        VulnName, VulnSev, VulnDescriptionForm, VulnImpactesForm, VulnSoluationForm, VulnSeeAlsoForm, VulnOutputForm = Forms_of_vuln.PUT_DELETE_Mathod_Form()
 
         if VulnSev.strip().lower() == "info":
             self.SevBtn.setStyleSheet('''
@@ -1184,9 +1327,14 @@ class MainWindow(QMainWindow):
         self.ImpactsPlainTextEdit.setStyleSheet("font-size: 16px; border: none;")
 
         self.SeeAlLabel.setText(VulnSeeAlsoForm.strip())
-        self.SeeAlLabel.setStyleSheet("font-size: 16px; border: none;")
+        self.SeeAlLabel.setStyleSheet("font-size: 16px; height: 70px; border: none;")
 
-        self.OutputPlainTextEdit.setText(VulnOutputForm.strip())
+        self.OutputPlainTextEdit.setText("""
+CyberScope was able to identify the following PHP version information :
+
+  Version : 5.6.40-38+ubuntu20.04.1+deb.sury.org+1
+  Source  : X-Powered-By: PHP/5.6.40-38+ubuntu20.04.1+deb.sury.org+1
+            """)
         self.OutputPlainTextEdit.setStyleSheet("font-size: 16px; border: none;")
 
         desc_hight   = int(self.DescPlainTextEdit.document().size().height())
@@ -1208,7 +1356,6 @@ class MainWindow(QMainWindow):
 
         self.VulnNameLabel.setText(VulnName.strip())
         self.SevBtn.setText(VulnSev.strip())
-
 
     def AddNewFolderWindow(self):
 
@@ -1234,19 +1381,19 @@ class MainWindow(QMainWindow):
         if len(self.NameInput.text().strip()) == 0:
             self.NameInput.setToolTip("Field cannot be empty!") 
             if self.system_theme == "Light":
-                self.NameInput.setStyleSheet('border: 1px solid rgb(255, 94, 92);background-color: rgb(36, 45, 59);color: white;height: 30px;')
+                self.NameInput.setStyleSheet('QLineEdit{border: 1px solid rgb(255, 94, 92);background-color: rgb(255,255,255);color: black;height: 30px; } QLineEdit:focus{border: 1px solid rgb(170, 170, 170);}')
             else:
                 self.NameInput.setStyleSheet('border: 1px solid rgb(255, 94, 93);background-color: rgb(36, 45, 59);color: white;height: 30px;')
 
         elif DB_V2.check_name_exist(self.NameInput.text().strip()):
             self.NameInput.setToolTip("Scan name already exists try another name!")
             if self.system_theme == "Light":
-                self.NameInput.setStyleSheet('border: 1px solid rgb(255, 94, 92);background-color: rgb(36, 45, 59);color: white;height: 30px;')
+                self.NameInput.setStyleSheet('QLineEdit{border: 1px solid rgb(255, 94, 92);background-color: rgb(255,255,255);color: black;height: 30px;} QLineEdit:focus{border: 1px solid rgb(170, 170, 170);}')
             else:
                 self.NameInput.setStyleSheet('border: 1px solid rgb(255, 94, 93);background-color: rgb(36, 45, 59);color: white;height: 30px;')
         else:
             if self.system_theme == "Light":
-                self.NameInput.setStyleSheet('border: 1px solid rgb(204, 204, 204);background-color: rgb(36, 45, 59);color: white;height: 30px;')
+                self.NameInput.setStyleSheet('QLineEdit{border: 1px solid rgb(204, 204, 204);background-color: rgb(255,255,255);color: black;height: 30px;} QLineEdit:focus{border: 1px solid rgb(170, 170, 170);}')
             else:
                 self.NameInput.setStyleSheet('QLineEdit{border: 1px solid rgb(109, 125, 148);background-color: rgb(36, 45, 59);color: white;height: 30px;}QLineEdit:focus{border: 1px solid rgb(28, 210, 227);}')
 
@@ -1254,14 +1401,14 @@ class MainWindow(QMainWindow):
 
         if self.is_valid_input(self.TargetInput.text()) and len(self.TargetInput.text().strip()) != 0:
             if self.system_theme == "Light":
-                self.TargetInput.setStyleSheet('border: 1px solid rgb(204, 204, 204);background-color: white;color: black;height: 30px;')
+                self.TargetInput.setStyleSheet('QLineEdit{border: 1px solid rgb(204, 204, 204);background-color: white;color: black;height: 30px;} QLineEdit:focus{border: 1px solid rgb(170, 170, 170);}')
             else:
                 self.TargetInput.setStyleSheet('QLineEdit{border: 1px solid rgb(109, 125, 148);background-color: rgb(36, 45, 59);color: white;height: 30px;}QLineEdit:focus{border: 1px solid rgb(28, 210, 227);}')
             ValidateTargetInput = True
         else:
             self.TargetInput.setToolTip("Please Enter Valid Target Like : 192.168.1.3 or URL or Link or example.com") 
             if self.system_theme == "Light":
-                self.TargetInput.setStyleSheet('border: 1px solid rgb(255, 94, 92);background-color: white;color: black;height: 30px;')
+                self.TargetInput.setStyleSheet('QLineEdit{border: 1px solid rgb(255, 94, 92);background-color: white;color: black;height: 30px;} QLineEdit:focus{border: 1px solid rgb(170, 170, 170);}')
             else:
                 self.TargetInput.setStyleSheet('border: 1px solid rgb(255, 94, 92);background-color: rgb(36, 45, 59);color: white;height: 30px;')
 
@@ -1278,12 +1425,12 @@ class MainWindow(QMainWindow):
 
     def CancelScanInput(self):
         if self.system_theme == "Light":
-            self.NameInput.setStyleSheet('border: 1px solid rgb(204, 204, 204);background-color: rgb(36, 45, 59);color: white;height: 30px;')
+            self.NameInput.setStyleSheet('QLineEdit{border: 1px solid rgb(204, 204, 204);background-color: rgb(255,255,255);color: black;height: 30px;} QLineEdit:focus{border: 1px solid rgb(170, 170, 170);}')
         else:
             self.NameInput.setStyleSheet('QLineEdit{border: 1px solid rgb(109, 125, 148);background-color: rgb(36, 45, 59);color: white;height: 30px;}QLineEdit:focus{border: 1px solid rgb(28, 210, 227);}')
 
         if self.system_theme == "Light":
-            self.TargetInput.setStyleSheet('border: 1px solid black;background-color: rgb(36, 45, 59);color: black;height: 30px;')
+            self.TargetInput.setStyleSheet('QLineEdit{border: 1px solid rgb(204, 204, 204);background-color: rgb(255,255,255);color: black;height: 30px;} QLineEdit:focus{border: 1px solid rgb(170, 170, 170);}')
         else:
             self.TargetInput.setStyleSheet('QLineEdit{border: 1px solid rgb(109, 125, 148);background-color: rgb(36, 45, 59);color: white;height: 30px;}QLineEdit:focus{border: 1px solid rgb(28, 210, 227);}')
 
@@ -1295,6 +1442,7 @@ class MainWindow(QMainWindow):
 
     def ScansTopBar(self):
         self.MyScansBtn.click()
+        self.ScansTopBarBtn.setChecked(True)
         all_buttons = self.SideBar.findChildren(QPushButton)
         for button in all_buttons:
             button.show()
@@ -1330,7 +1478,9 @@ class MainWindow(QMainWindow):
         self.MyAccountBtn.show()
         self.AboutBtn.show()
         self.ThemeBtn.show()
+        self.BackBtn.setText('')
         self.MyAccountBtn.click()
+        self.SettingsTopBarBtn.setChecked(True)
 
         font_1 = self.SettingsTopBarBtn.font()
         font_2 = self.ScansTopBarBtn.font()

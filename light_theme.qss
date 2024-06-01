@@ -133,6 +133,11 @@ QTabBar::tab:selected {
 	border: none;
 }
 
+#OutputPlainTextEdit{
+	background-color: rgb(245, 245, 245);
+	border: 1px solid rgb(221, 221, 221);
+}
+
 #NewPasswordInput,#CurrentPasswordInput,#EmailInput,#FullNameInput{
 	height: 30px;
 	font-size: 15px;
@@ -148,9 +153,22 @@ QTabBar::tab:selected {
 	height: 30px;
 }
 
+
+#NameInput:focus,#DescriptionInput:focus,#FolderInput:focus,#TargetInput:focus{
+	border: 1px solid rgb(170, 170, 170);
+}
+
+
 #SearchInput{
 	border: 1px solid rgb(178, 178, 178);
-	height: 25px;
+	height: 28px;
+}
+QChart {
+    background-color: red;
+}
+
+QChartView {
+    background-color: red;
 }
 
 
@@ -159,17 +177,21 @@ QTabBar::tab:selected {
 #InTheFutureLabel2,#InTheFutureLabel{
 	font-size: 80px;
 	font-weight: bold;
-	color: rgb(29, 210, 227);
+	color: black;
 }
 
 #VulnNameLabel{
 	font-size: 20px;
 }
 
-#label_30,#label_31,#label_32,#label_33,#label_35{
+#label_30,#label_31,#label_32,#label_33,#label_35,#label_36{
 	font-size: 20px;
 	font-weight: bold;
+	color: black;
+}
 
+#SeeAlLabel{
+	color: black;
 }
 
 #label_26{
@@ -205,10 +227,12 @@ QTabBar::tab:selected {
 #HostLabel{
 	padding-left: 32px;
 	font-size: 12px;
+	font-weight: bold;
 }
 
 #VulnerabilitiesLabel{
 	font-size: 12px;
+	font-weight: bold;
 }
 
 #CriticalLabel{
@@ -566,7 +590,7 @@ QPushButton{
 
 #VulnBtn:hover{
 	text-decoration: underline;
-	color: rgb(38, 55, 70);
+	color: rgb(56, 109, 156);
 }
 
 #NewPasswordInput:focus,#CurrentPasswordInput:focus,#EmailInput:focus,#FullNameInput:focus{

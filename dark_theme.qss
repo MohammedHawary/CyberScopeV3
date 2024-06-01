@@ -141,6 +141,11 @@ QTabBar::tab:selected {
 	background-color: rgb(36, 45, 59);
 	color: white;
 }
+#OutputPlainTextEdit{
+	background-color: rgb(49, 58, 70);
+	border: 1px solid rgb(72, 76, 86);
+	color: white;
+}
 
 #NewPasswordInput,#CurrentPasswordInput,#EmailInput,#FullNameInput{
 	height: 30px;
@@ -149,6 +154,8 @@ QTabBar::tab:selected {
 	color: white;
 	border: 1px solid rgb(108, 124, 146);
 }
+
+
 
 #NameInput,#DescriptionInput,#FolderInput,#TargetInput{
 	background-color: rgb(36, 45, 59);
@@ -162,7 +169,7 @@ QTabBar::tab:selected {
 	border: 1px solid rgb(108, 124, 146);
 	background-color: rgb(36, 45, 59);
 	color: white;
-	height: 25px;
+	height: 28px;
 }
 
 
@@ -179,10 +186,14 @@ QTabBar::tab:selected {
 	color: white;
 }
 
-#label_30,#label_31,#label_32,#label_33,#label_35{
+#label_30,#label_31,#label_32,#label_33,#label_35,#label_36{
 	font-size: 20px;
 	font-weight: bold;
 	color: white;
+}
+
+#SeeAlLabel{
+	color: rgb(30, 210, 227);
 }
 
 #label_26{
@@ -225,11 +236,13 @@ QTabBar::tab:selected {
 	padding-left: 32px;
 	font-size: 12px;
 	color: white;
+	font-weight: bold;
 }
 
 #VulnerabilitiesLabel{
 	font-size: 12px;
 	color: white;
+	font-weight: bold;
 }
 
 #CriticalLabel{
