@@ -27,19 +27,7 @@ class Dialog(QDialog):
         self.Cancel_btn     = self.findChild(QPushButton,   "Cancel_btn"    )
         self.line_edit      = self.findChild(QLineEdit,     "line_edit"     )
         self.ok_button      = self.findChild(QPushButton,   "ok_button"     )
-        light_theme = "Dark"
-
-        if light_theme == "Light":
-            self.frame.setStyleSheet('background-color: rgb(245, 245, 245);border-top: 3px solid rgb(38, 55, 70);border-bottom: 2px dotted rgb(221, 221, 221);')
-            self.frame_2.setStyleSheet('background-color: rgb(245, 245, 245);border-bottom: 2px dotted rgb(221, 221, 221);')
-            self.frame_3.setStyleSheet('background-color: rgb(245, 245, 245);')
-            self.label.setStyleSheet('color: black; font-size: 20px;border: none;')
-            self.label_2.setStyleSheet('color: black; font-size: 15px;border: none;')
-            self.Cancel_btn2.setStyleSheet('QPushButton{border: none; font-size: 20px;color: rgb(221, 221, 221);font-weight: bold;} QPushButton:hover{color:rgb(51, 51, 51);}')
-            self.line_edit.setStyleSheet('QLineEdit{height: 30px; font-size: 15px; border: 1px solid rgb(200, 200, 200); padding-left: 10px;} QLineEdit:focus{border: 1px solid rgb(166, 166, 166)};')
-            self.ok_button.setStyleSheet('QPushButton{height:29px; width: 75px; background-color:rgb(0, 113, 185); color: white;border: none;font-size: 12px;}QPushButton:hover{background-color:rgb(42, 99, 149);}')
-            self.Cancel_btn.setStyleSheet('QPushButton{height:29px; width: 75px;background-color:rgb(245, 245, 245); color: black;border: none;font-size: 12px;}QPushButton:hover{background-color:rgb(197, 197, 197); color:rgb(0, 113, 185);}')
-        
+        self.light_theme    = "Light"
         if parent:
             self.move(parent.geometry().center() - self.rect().center())
 
@@ -49,20 +37,52 @@ class Dialog(QDialog):
         self.line_edit.returnPressed.connect(self.validate_and_accept)
 
 
+    def mode(self,light_theme="Light"):
+        if light_theme == "Light":
+            self.light_theme = "Light"
+            self.frame.setStyleSheet('background-color: rgb(245, 245, 245);border-top: 5px solid rgb(38, 55, 70);border-bottom: 2px dotted rgb(221, 221, 221);')
+            self.frame_2.setStyleSheet('background-color: rgb(245, 245, 245);border-bottom: 2px dotted rgb(221, 221, 221);')
+            self.frame_3.setStyleSheet('background-color: rgb(245, 245, 245);')
+            self.label.setStyleSheet('color: black; font-size: 20px;border: none;')
+            self.label_2.setStyleSheet('color: black; font-size: 15px;border: none;')
+            self.Cancel_btn2.setStyleSheet('QPushButton{border: none; font-size: 20px;color: rgb(221, 221, 221);font-weight: bold;} QPushButton:hover{color:rgb(51, 51, 51);}')
+            self.line_edit.setStyleSheet('QLineEdit{height: 30px; font-size: 15px; border: 1px solid rgb(200, 200, 200); color: black;padding-left: 10px;} QLineEdit:focus{border: 1px solid rgb(166, 166, 166)};')
+            self.ok_button.setStyleSheet('QPushButton{height:29px; width: 75px; background-color:rgb(0, 113, 185); color: white;border: none;font-size: 12px;}QPushButton:hover{background-color:rgb(42, 99, 149);}')
+            self.Cancel_btn.setStyleSheet('QPushButton{height:29px; width: 75px;background-color:rgb(245, 245, 245); color: black;border: none;font-size: 12px;}QPushButton:hover{background-color:rgb(197, 197, 197); color:rgb(0, 113, 185);}')
+        else:
+            self.light_theme = "Dark"
+            self.frame.setStyleSheet('background-color: rgb(59, 74, 97);border-top: 5px solid rgb(38, 55, 70);border-bottom: 2px dotted rgb(49, 58, 70);')
+            self.frame_2.setStyleSheet('background-color: rgb(59, 74, 97);border-bottom: 2px dotted rgb(49, 58, 70);')
+            self.frame_3.setStyleSheet('background-color: rgb(59, 74, 97);')
+            self.label.setStyleSheet('color: white; font-size: 20px;border: none;')
+            self.label_2.setStyleSheet('color: white; font-size: 15px;border: none;')
+            self.Cancel_btn2.setStyleSheet('QPushButton{border: none; font-size: 20px;color: rgb(255, 89, 89);font-weight: bold;} QPushButton:hover{color:rgb(153, 0, 0);}')
+            self.line_edit.setStyleSheet('QLineEdit{height: 30px; font-size: 15px; border: 1px solid rgb(110, 126, 149); padding-left: 10px; color: white;} QLineEdit:focus{border: 1px solid rgb(0, 165, 181)};')
+            self.ok_button.setStyleSheet('QPushButton{height:29px; width: 75px; background-color:rgb(19, 114, 129); color: white;border-radius: 2px; border: 1px solid rgb(0, 165, 182);font-size: 12px;}QPushButton:hover{background-color:rgb(0, 165, 182);}')
+            self.Cancel_btn.setStyleSheet('QPushButton{height:29px; width: 75px;background-color:rgb(90, 93, 101); color: white;border-radius: 2px;border: none;font-size: 12px;}QPushButton:hover{background-color:rgb(72, 83, 98);}')
 
     def validate_and_accept(self):
         new_name = self.line_edit.text().strip()
         if not new_name:
             self.line_edit.setToolTip("Field cannot be empty!")
-            self.line_edit.setStyleSheet('QLineEdit{height: 30px; font-size: 15px; border: 1px solid red; padding-left: 10px;} QLineEdit:focus{border: 1px solid red};')
+            if self.light_theme == "Light":
+                self.line_edit.setStyleSheet('QLineEdit{height: 30px; font-size: 15px; border: 1px solid red; padding-left: 10px; color: black;} QLineEdit:focus{border: 1px solid red};')
+            else:
+                self.line_edit.setStyleSheet('QLineEdit{height: 30px; font-size: 15px; border: 1px solid red; padding-left: 10px; color: white;} QLineEdit:focus{border: 1px solid red};')
             return
         elif len(new_name) > 20:
             self.line_edit.setToolTip("Please Enter folder name between (_1 and 19_) charcter!")
-            self.line_edit.setStyleSheet('QLineEdit{height: 30px; font-size: 15px; border: 1px solid red; padding-left: 10px;} QLineEdit:focus{border: 1px solid red};')
+            if self.light_theme == "Light":
+                self.line_edit.setStyleSheet('QLineEdit{height: 30px; font-size: 15px; border: 1px solid red; padding-left: 10px; color: black;} QLineEdit:focus{border: 1px solid red};')
+            else:
+                self.line_edit.setStyleSheet('QLineEdit{height: 30px; font-size: 15px; border: 1px solid red; padding-left: 10px; color: white;} QLineEdit:focus{border: 1px solid red};')
             return
         elif DB_V2.check_folder_exist_in_folderNames_table(new_name):
             self.line_edit.setToolTip("Folder name already exists try another name!")
-            self.line_edit.setStyleSheet('QLineEdit{height: 30px; font-size: 15px; border: 1px solid red; padding-left: 10px;} QLineEdit:focus{border: 1px solid red};')
+            if self.light_theme == "Light":
+                self.line_edit.setStyleSheet('QLineEdit{height: 30px; font-size: 15px; border: 1px solid red; padding-left: 10px; color: black;} QLineEdit:focus{border: 1px solid red};')
+            else:
+                self.line_edit.setStyleSheet('QLineEdit{height: 30px; font-size: 15px; border: 1px solid red; padding-left: 10px; color: white;} QLineEdit:focus{border: 1px solid red};')
             return
         self.accept()
 
@@ -1330,10 +1350,10 @@ class MainWindow(QMainWindow):
         self.SeeAlLabel.setStyleSheet("font-size: 16px; height: 70px; border: none;")
 
         self.OutputPlainTextEdit.setText("""
-CyberScope was able to identify the following PHP version information :
+    CyberScope was able to identify the following PHP version information :
 
-  Version : 5.6.40-38+ubuntu20.04.1+deb.sury.org+1
-  Source  : X-Powered-By: PHP/5.6.40-38+ubuntu20.04.1+deb.sury.org+1
+      Version : 5.6.40-38+ubuntu20.04.1+deb.sury.org+1
+      Source  : X-Powered-By: PHP/5.6.40-38+ubuntu20.04.1+deb.sury.org+1
             """)
         self.OutputPlainTextEdit.setStyleSheet("font-size: 16px; border: none;")
 
@@ -1367,6 +1387,7 @@ CyberScope was able to identify the following PHP version information :
         y = (screen_geometry.height() - dialog.height()) / 2
         dialog.move(int(x), int(y))
 
+        dialog.mode(self.system_theme)
         dialog.create_folder()
         result = dialog.exec_()
         if result == QDialog.Accepted:
@@ -1582,7 +1603,7 @@ CyberScope was able to identify the following PHP version information :
             DB_V2.delete_row_by_foldername(button.objectName())
 
             button.deleteLater()
-            self.myScans_btn.click()
+            self.MyScansBtn.click()
 
     def renameButton(self, button):
         dialog = Dialog(self)
@@ -1591,6 +1612,7 @@ CyberScope was able to identify the following PHP version information :
         y = (screen_geometry.height() - dialog.height()) / 2
         dialog.move(int(x), int(y))
 
+        dialog.mode(self.system_theme)
         dialog.rename_folder()
         result = dialog.exec_()
         if result == QDialog.Accepted:
@@ -1603,7 +1625,7 @@ CyberScope was able to identify the following PHP version information :
             DB_V2.rename_folder(button.objectName(),dialog.line_edit.text().strip())
 
             button.setObjectName(dialog.line_edit.text().strip())
-            button.setText(f"        {dialog.line_edit.text().strip()}")
+            button.setText(f"{dialog.line_edit.text().strip()}")
 
     def showContextMenu(self, pos, button, menu):
         global_pos = button.mapToGlobal(pos)
