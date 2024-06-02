@@ -10,7 +10,6 @@ import webbrowser
 import winreg
 
 
-
 class Dialog(QDialog):
     def __init__(self, parent=None):
         super(Dialog, self).__init__(parent=None)
@@ -1283,8 +1282,6 @@ class MainWindow(QMainWindow):
 
     def show_vuln_info(self, VulnName):
         self.stackedWidget.setCurrentIndex(8)
-        self.SeeAlLabel.setText("&nbsp;&nbsp;&nbsp;<a href='http://www.example.com'>Click me to open link</a>")
-        self.SeeAlLabel.setOpenExternalLinks(True)
 
         import Forms_of_vuln
 
@@ -1346,7 +1343,16 @@ class MainWindow(QMainWindow):
         self.ImpactsPlainTextEdit.setText(VulnImpactesForm.strip())
         self.ImpactsPlainTextEdit.setStyleSheet("font-size: 16px; border: none;")
 
-        self.SeeAlLabel.setText(VulnSeeAlsoForm.strip())
+        SeeAlLabel = ""
+        for link in self.extract_links(VulnSeeAlsoForm.strip()):
+            if self.system_theme == "Light":
+                SeeAlLabel += f"&nbsp;&nbsp;&nbsp;<a href='{link}' style='color: rgb(0, 106, 182);'>{link}</a><br><br>"
+            else:
+                SeeAlLabel += f"&nbsp;&nbsp;&nbsp;<a href='{link}' style='color: rgb(29, 210, 227);'>{link}</a><br><br>"
+    
+        self.SeeAlLabel.setText(SeeAlLabel)
+        self.SeeAlLabel.setOpenExternalLinks(True)
+
         self.SeeAlLabel.setStyleSheet("font-size: 16px; height: 70px; border: none;")
 
         self.OutputPlainTextEdit.setText("""
@@ -1376,6 +1382,16 @@ class MainWindow(QMainWindow):
 
         self.VulnNameLabel.setText(VulnName.strip())
         self.SevBtn.setText(VulnSev.strip())
+
+
+    def extract_links(self, text):
+        # Regular expression pattern to match URLs
+        url_pattern = r'(https?://[^\s]+)'
+
+        # Find all matching URLs in the text
+        links = re.findall(url_pattern, text)
+
+        return links
 
     def AddNewFolderWindow(self):
 
