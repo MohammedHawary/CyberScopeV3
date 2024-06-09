@@ -1,0 +1,176 @@
+def webserver_name_Form(serverName):
+	if serverName == "Apache":
+		vuln_name = f'''
+{serverName} HTTP Server Installed (Linux)
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+The remote host has {serverName} HTTP Server software installed, indicating that {serverName} HTTP Server, a widely used web server software, is present on the Linux system.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://httpd.apache.org/
+		'''
+	elif serverName == "Nginx":
+
+		vuln_name = f'''
+{serverName} Unit HTTP Server Detection
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+The NGINX Unit HTTP server was detected on the remote host by examining the HTTP banner, as determined by CyberScope.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://nginx.org/
+		'''
+	elif serverName == "Microsoft-IIS":
+		vuln_name = f'''
+Microsoft Internet Information Services (IIS) Installed
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+The script checks Windows registry keys and executables for the presence of a Microsoft Internet Information Services (IIS) installation, indicating the detection of IIS on the remote Windows host.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://www.iis.net/
+		'''
+	elif serverName == "LiteSpeed":
+		vuln_name = f'''
+{serverName} HTTP Server Installed
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+The remote host has {serverName} HTTP Server software installed, indicating that {serverName} HTTP Server, a widely used web server software.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://www.litespeedtech.com/products/litespeed-web-server
+		'''
+	elif serverName == "OpenResty":
+		vuln_name = f'''
+{serverName} HTTP Server Installed
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+The remote host has {serverName} HTTP Server software installed, indicating that {serverName} HTTP Server, a widely used web server software.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://openresty.org/
+		'''
+	elif serverName == "Tomcat":
+		vuln_name = f'''
+Apache {serverName} Installed (Windows)
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+Apache Tomcat, a web server, is installed on the remote Windows host, indicating the presence of this software.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://tomcat.apache.org/
+		'''
+	elif serverName == "Gunicorn":
+		vuln_name = f'''
+{serverName} HTTP Server Installed
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+The remote host has {serverName} HTTP Server software installed, indicating that {serverName} HTTP Server, a widely used web server software.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://gunicorn.org/
+		'''
+	elif serverName == "Node.js":
+		vuln_name = f'''
+{serverName} HTTP Server Installed
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+The remote host has {serverName} HTTP Server software installed, indicating that {serverName} HTTP Server, a widely used web server software.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://nodejs.org/docs/latest/api/
+		'''
+	elif serverName == "IBM HTTP Server":
+		vuln_name = f'''
+{serverName} HTTP Server Installed (Linux)
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+The IBM HTTP Server is installed on the remote Linux/Unix host.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://www.ibm.com/docs/en/ibm-http-server
+		'''
+	elif serverName == "Jetty":
+		vuln_name = f'''
+Eclipse Jetty Web Server Detection
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+The remote host has been identified as running the Eclipse Jetty web server.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://eclipse.dev/jetty/
+		''' 
+	
+	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form]
+	return data
+

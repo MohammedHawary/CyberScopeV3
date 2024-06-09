@@ -1,31 +1,47 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget
-from PyQt5.QtChart import QChart, QChartView
-from PyQt5.QtGui import QColor
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QTextEdit, QScrollArea
 
-class MainWindow(QMainWindow):
+class ScrollAreaExample(QWidget):
     def __init__(self):
         super().__init__()
+        self.initUI()
 
-        self.chart = QChart()
-        self.chart.setObjectName('test')
-        self.chart_view = QChartView(self.chart)
-
-        self.button = QPushButton("Change Color")
-        self.button.clicked.connect(self.change_chart_background)
+    def initUI(self):
+        self.setWindowTitle('QScrollArea Example')
+        self.setGeometry(100, 100, 400, 300)
 
         layout = QVBoxLayout()
-        layout.addWidget(self.chart_view)
-        layout.addWidget(self.button)
 
-        container = QWidget()
-        container.setLayout(layout)
-        self.setCentralWidget(container)
+        self.scrollArea = QScrollArea()
+        self.scrollArea.setWidgetResizable(True)
 
-    def change_chart_background(self):
-        self.chart.setBackgroundBrush(QColor("red"))
+        # Create a widget to hold the elements inside the scroll area
+        self.scrollWidget = QWidget()
+        self.scrollArea.setWidget(self.scrollWidget)
 
-if __name__ == "__main__":
-    app = QApplication([])
-    window = MainWindow()
-    window.show()
-    app.exec_()
+        self.scrollLayout = QVBoxLayout(self.scrollWidget)
+
+        # Add some example elements to the scroll area
+        for i in range(20):
+            self.scrollLayout.addWidget(QTextEdit(f"Text {i+1}"))
+
+        self.clearButton = QPushButton('Clear ScrollArea')
+        self.clearButton.clicked.connect(self.clearScrollArea)
+
+        layout.addWidget(self.scrollArea)
+        layout.addWidget(self.clearButton)
+
+        self.setLayout(layout)
+
+    def clearScrollArea(self):
+        # Clear all elements inside the scroll area
+        for i in reversed(range(self.scrollLayout.count())):
+            widgetToRemove = self.scrollLayout.itemAt(i).widget()
+            self.scrollLayout.removeWidget(widgetToRemove)
+            widgetToRemove.setParent(None)
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = ScrollAreaExample()
+    ex.show()
+    sys.exit(app.exec_())

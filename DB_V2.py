@@ -239,7 +239,7 @@ def rename_folder(old_folder_name, new_folder_name):
 # for i in data:
 #     print(i[1])
 
-# print(get_scan_by_name("Scan1")[6])
+# print(get_scan_by_name("Scan 1"))
 
 
 

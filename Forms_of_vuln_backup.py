@@ -1,6 +1,4 @@
 def SSL_TLS_Form():
-	vuln_family = ''
-
 	vuln_name = '''
 TLS Version 1.0 Protocol Detection
 	'''
@@ -26,13 +24,10 @@ Enable support for TLS 1.2 and 1.3, and disable support for TLS 1.0.
 	vuln_See_Also_form = '''
 https://tools.ietf.org/html/draft-ietf-tls-oldversions-deprecate-00
 	'''	
-	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form, vuln_family]
+	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form]
 	return data
 
-
 def TRACE_TRACK_Mathod_Form():
-	vuln_family = ''
-
 	vuln_name = '''
 HTTP TRACE / TRACK Methods Allowed
 	'''
@@ -52,13 +47,10 @@ To mitigate risks, disable the TRACE method on the web server unless essential f
 http://www.apacheweek.com/issues/03-01-24
 https://download.oracle.com/sunalerts/1000718.1.html
 	'''	
-	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form, vuln_family]
+	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form]
 	return data
 
-
 def PHP_Unsupported_Version_Detection():
-	vuln_family = ''
-
 	vuln_name = '''
 PHP Unsupported Version Detection
 	'''
@@ -88,13 +80,10 @@ Upgrade to a version of PHP that is currently supported.
 http://php.net/eol.php
 https://wiki.php.net/rfc/releaseprocess
 	'''	
-	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form, vuln_family]
+	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form]
 	return data
 
-
 def PUT_DELETE_Mathod_Form():
-	vuln_family = ''
-
 	vuln_name = '''
 Web Server HTTP Dangerous Method Detection
 	'''
@@ -130,13 +119,12 @@ https://tools.ietf.org/html/rfc7231#section-4.3.4
 
 https://tools.ietf.org/html/rfc7231#section-4.3.5
 	'''
-	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form, vuln_family]
+	
+	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form]
 	return data
 
 
 def OPTIONS_Mathod_Form():
-	vuln_family = ''
-
 	vuln_name = '''
 HTTP Methods Allowed
 	'''
@@ -166,17 +154,14 @@ Monitor server logs for any unusual activity.
 	vuln_See_Also_form = '''
 https://www.owasp.org/index.php/Test_HTTP_Methods_(OTG-CONFIG-006)
 	'''
-	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form, vuln_family]
+	
+	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form]
 	return data
 
-	
 def Content_Security_Policy_Header_Missing():
-	vuln_family = ''
-
 	vuln_name = '''
 Missing Content Security Policy
 	'''
-	vuln_family = 'HTTP Security Header'
 	vuln_sev  = '''
 LOW
 	'''
@@ -195,17 +180,14 @@ Set up Content Security Policy (CSP) for your website either through the additio
 	vuln_See_Also_form = '''
 https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
 	'''
-	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form, vuln_family]
+	
+	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form]
 	return data
 
-
 def Permissions_Policy_Header_Missing():
-	vuln_family = ''
-
 	vuln_name = '''
 Missing Referrer Policy
 	'''
-	vuln_family = 'HTTP Security Header'
 	vuln_sev  = '''
 INFO
 	'''
@@ -224,17 +206,14 @@ Adjust the Referrer Policy of your website either by including the 'Referrer-Pol
 https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy
 https://scotthelme.co.uk/goodbye-feature-policy-and-hello-permissions-policy/
 	'''
-	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form, vuln_family]
+	
+	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form]
 	return data
 
-	
 def Referrer_Policy_Header_Missing():
-	vuln_family = ''
-
 	vuln_name = '''
 Missing Referrer Policy
 	'''
-	vuln_family = 'HTTP Security Header'
 	vuln_sev  = '''
 INFO
 	'''
@@ -252,13 +231,11 @@ You can implement Referrer Policy on your website either by including the 'Refer
 	vuln_See_Also_form = '''
 https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
 	'''
-	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form, vuln_family]
+	
+	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form]
 	return data
 
-	
 def Duplicate_HTTP_Headers():
-	vuln_family = ''
-
 	vuln_name = '''
 Duplicate HTTP Headers Detected
 	'''
@@ -279,17 +256,14 @@ Make sure that each HTTP header or meta tag with http-equiv declarations has a u
 https://tools.ietf.org/id/draft-ietf-httpbis-header-structure-15.html
 https://www.rfc-editor.org/rfc/rfc7230#section-3.2.2
 	''' 
-	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form, vuln_family]
+	
+	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form]
 	return data
 
-	
 def X_XSS_Header_Missing():
-	vuln_family = ''
-
 	vuln_name = '''
 Missing 'X-XSS-Protection' Header
 	'''
-	vuln_family = 'HTTP Security Header'
 	vuln_sev  = '''
 INFO
 	'''
@@ -310,17 +284,198 @@ Set up your web server to incorporate an 'X-XSS-Protection' header with the sett
 https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection
 https://www.owasp.org/index.php/OWASP_Secure_Headers_Project#xxxsp
 	''' 
-	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form, vuln_family]
+	
+	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form]
 	return data
 
-	
-def Content_Type_Header_Missing():
-	vuln_family = ''
+def webserver_name_Form(serverName):
+	vuln_name = ''
+	vuln_sev = ''
+	vuln_Description_form = ''
+	vuln_Impactes_form = ''
+	vuln_Soluation_form = ''
+	vuln_See_Also_form = '' 
 
+	if serverName == "Apache":
+		vuln_name = f'''
+{serverName} HTTP Server Installed (Linux)
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+The remote host has {serverName} HTTP Server software installed, indicating that {serverName} HTTP Server, a widely used web server software, is present on the Linux system.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://httpd.apache.org/
+		'''
+	elif serverName == "Nginx":
+
+		vuln_name = f'''
+{serverName} Unit HTTP Server Detection
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+The NGINX Unit HTTP server was detected on the remote host by examining the HTTP banner, as determined by CyberScope.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://nginx.org/
+		'''
+	elif serverName == "Microsoft-IIS":
+		vuln_name = f'''
+Microsoft Internet Information Services (IIS) Installed
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+The script checks Windows registry keys and executables for the presence of a Microsoft Internet Information Services (IIS) installation, indicating the detection of IIS on the remote Windows host.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://www.iis.net/
+		'''
+	elif serverName == "LiteSpeed":
+		vuln_name = f'''
+{serverName} HTTP Server Installed
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+The remote host has {serverName} HTTP Server software installed, indicating that {serverName} HTTP Server, a widely used web server software.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://www.litespeedtech.com/products/litespeed-web-server
+		'''
+	elif serverName == "OpenResty":
+		vuln_name = f'''
+{serverName} HTTP Server Installed
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+The remote host has {serverName} HTTP Server software installed, indicating that {serverName} HTTP Server, a widely used web server software.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://openresty.org/
+		'''
+	elif serverName == "Tomcat":
+		vuln_name = f'''
+Apache {serverName} Installed (Windows)
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+Apache Tomcat, a web server, is installed on the remote Windows host, indicating the presence of this software.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://tomcat.apache.org/
+		'''
+	elif serverName == "Gunicorn":
+		vuln_name = f'''
+{serverName} HTTP Server Installed
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+The remote host has {serverName} HTTP Server software installed, indicating that {serverName} HTTP Server, a widely used web server software.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://gunicorn.org/
+		'''
+	elif serverName == "Node.js":
+		vuln_name = f'''
+{serverName} HTTP Server Installed
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+The remote host has {serverName} HTTP Server software installed, indicating that {serverName} HTTP Server, a widely used web server software.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://nodejs.org/docs/latest/api/
+		'''
+	elif serverName == "IBM HTTP Server":
+		vuln_name = f'''
+{serverName} HTTP Server Installed (Linux)
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+The IBM HTTP Server is installed on the remote Linux/Unix host.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://www.ibm.com/docs/en/ibm-http-server
+		'''
+	elif serverName == "Jetty":
+		vuln_name = f'''
+Eclipse Jetty Web Server Detection
+		'''
+		vuln_sev  = '''
+INFO
+		'''
+		vuln_Description_form = f'''
+The remote host has been identified as running the Eclipse Jetty web server.
+		'''
+		vuln_Impactes_form = '''
+		'''
+		vuln_Soluation_form = '''
+		'''
+		vuln_See_Also_form = '''
+https://eclipse.dev/jetty/
+		''' 
+	
+	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form]
+	return data
+
+
+def Content_Type_Header_Missing():
 	vuln_name = '''
 Missing 'Content-Type' Header
 	'''
-	vuln_family = 'HTTP Security Header'
 	vuln_sev  = '''
 LOW
 	'''
@@ -341,18 +496,15 @@ https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Type
 https://www.iana.org/assignments/media-types/media-types.xhtml
 https://www.w3.org/Protocols/rfc1341/4_Content-Type.html
 	''' 
-
-	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form, vuln_family]
+	
+	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form]
 	return data
 
 
 def Cache_Control_Header_Missing():
-	vuln_family = ''
-
 	vuln_name = '''
 Missing 'Cache-Control' Header
 	'''
-	vuln_family = 'HTTP Security Header'
 	vuln_sev  = '''
 LOW
 	'''
@@ -371,18 +523,15 @@ When the page contains sensitive information, set the 'Cache-Control' value to '
 https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
 https://www.owasp.org/index.php/Testing_for_Browser_cache_weakness_(OTG-AUTHN-006)
 	''' 
-
-	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form, vuln_family]
+	
+	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form]
 	return data
 
 
 def X_Content_Type_Options_Header_Missing():
-	vuln_family = ''
-
 	vuln_name = '''
 Missing 'X-Content-Type-Options' Header
 	'''
-	vuln_family = 'HTTP Security Header'
 	vuln_sev  = '''
 LOW
 	'''
@@ -402,18 +551,15 @@ This simple measure can significantly enhance the site's security posture and pr
 https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
 https://www.owasp.org/index.php/OWASP_Secure_Headers_Project#xcto
 	''' 
-
-	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form, vuln_family]
+	
+	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form]
 	return data
 
 
 def X_Frame_Options_Header_Missing():
-	vuln_family = ''
-
 	vuln_name = '''
 Missing 'X-Frame-Options' Header
 	'''
-	vuln_family = 'HTTP Security Header'
 	vuln_sev  = '''
 LOW
 	'''
@@ -426,13 +572,11 @@ By analyzing the remote operating system, one can discern the type of remote sys
 	vuln_See_Also_form = '''
 	'''
 	
-	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form, vuln_family]
+	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form]
 	return data
 
 
 def webserver_name_Form():
-	vuln_family = ''
-
 	vuln_name = '''
 Device Type
 	'''
@@ -448,6 +592,8 @@ By analyzing the remote operating system, one can discern the type of remote sys
 	'''
 	vuln_See_Also_form = '''
 	'''
-	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form, vuln_family]
+
+	data = [vuln_name, vuln_sev, vuln_Description_form, vuln_Impactes_form, vuln_Soluation_form, vuln_See_Also_form]
 	return data
+
 

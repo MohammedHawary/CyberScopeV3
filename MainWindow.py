@@ -1,10 +1,14 @@
 from PyQt5 import uic, QtWidgets
 from PyQt5.QtWidgets import QApplication, QInputDialog, QFrame, QSizePolicy,QToolTip, QSpacerItem, QMessageBox, QCheckBox, QRadioButton, QScrollArea, QComboBox, QToolButton, QTextEdit, QTabWidget, QDialog, QHBoxLayout, QMainWindow, QWidget, QLineEdit, QAction, QPushButton, QLabel, QVBoxLayout, QStackedWidget, QDesktopWidget, QGridLayout, QMenu, QPlainTextEdit, QTextBrowser
 from PyQt5.QtCore import QFile, QTextStream, Qt, QTimer, QCoreApplication, QMargins ,QSize, QEvent
-from PyQt5.QtGui import QIcon, QFont, QPainter, QColor, QPen, QTextCursor, QCursor
+from PyQt5.QtGui import QIcon, QFont, QPainter, QColor, QPen, QTextCursor, QBrush, QCursor
 from PyQt5.QtChart import QChart, QChartView, QPieSeries, QBarSet, QBarSeries, QLegend
 import re
-import DB_V2
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+import DB_V3
+# from VulnerabilitesScripts import Check_All_Headers
 from datetime import datetime
 import webbrowser
 import winreg
@@ -76,7 +80,7 @@ class Dialog(QDialog):
             else:
                 self.line_edit.setStyleSheet('QLineEdit{height: 30px; font-size: 15px; border: 1px solid red; padding-left: 10px; color: white;} QLineEdit:focus{border: 1px solid red};')
             return
-        elif DB_V2.check_folder_exist_in_folderNames_table(new_name):
+        elif DB_V3.folder_exists(new_name):
             self.line_edit.setToolTip("Folder name already exists try another name!")
             if self.light_theme == "Light":
                 self.line_edit.setStyleSheet('QLineEdit{height: 30px; font-size: 15px; border: 1px solid red; padding-left: 10px; color: black;} QLineEdit:focus{border: 1px solid red};')
@@ -128,6 +132,8 @@ class MainWindow(QMainWindow):
         self.FoldersLabel              = self.findChild(QLabel,          "FoldersLabel"             )
         self.MyScansLabel              = self.findChild(QLabel,          "MyScansLabel"             )
         self.EmptyFolderLabel          = self.findChild(QLabel,          "EmptyFolderLabel"         )
+        self.label_109                 = self.findChild(QLabel,          "label_109"         )
+        self.label_107                 = self.findChild(QLabel,          "label_107"         )
                             # QPushButton
         self.MyScansBtn                = self.findChild(QPushButton,     "MyScansBtn"               )
         self.AllScansBtn               = self.findChild(QPushButton,     "AllScansBtn"              )
@@ -197,19 +203,38 @@ class MainWindow(QMainWindow):
 ##################################################################################################################
 ##################################################################################################################
                             # Chart section
-        self.circleChart(self.gridLayout_102, 25,10, 0, 0, 1)
+        info     = 0
+        low      = 0
+        medium   = 0
+        high     = 0
+        critical = 0
+        ScansIds = DB_V3.get_all_scan_ids()
+        for ScanId in ScansIds:
+            VulnerabilityIds = DB_V3.get_vulnerability_ids_by_scan_id(ScanId)
+            for VulnerabilityId in VulnerabilityIds:
+                VulnData = DB_V3.get_vulnerability_by_id(VulnerabilityId)
+                if VulnData['severity'] == "INFO":
+                    info += 1
+                if VulnData['severity'] == "LOW":
+                    low += 1
+                if VulnData['severity'] == "MEDIUM":
+                    medium += 1
+                if VulnData['severity'] == "HIGH":
+                    high += 1
+                if VulnData['severity'] == "CRITICAL":
+                    critical += 1
 
-        self.circleChart(self.gridLayout_103, 25,10, 0, 0, 1)
+        self.circleChart(self.gridLayout_102, info, low, medium, high,critical)
 
-        self.lineChart(25,10,0,0,1)
+        self.circleChart(self.gridLayout_103, info, low, medium, high,critical)
+
+        self.lineChart(info, low, medium, high,critical)
 
 ##################################################################################################################
                             # called Func Section
-        DB_V2.create_table()
-        DB_V2.craet_all_tables()
-        self.addBtns(DB_V2.select_all_data())
+        DB_V3.create_tables()
+        self.addBtns(DB_V3.get_folders())
         # self.HostInDesailsWidget.currentChanged.connect(self.create_table_scans_for_vulnerability)
-        self.create_table_scans_for_vulnerability()
         self.tab_5.installEventFilter(self)
 
         self.MyScansBtn.click()
@@ -239,10 +264,10 @@ class MainWindow(QMainWindow):
             if btn.isChecked():
                 self.load_stylesheet("dark_theme.qss")
                 system_theme = "Dark"
-                DB_V2.insert_theme_data("Dark")
+                DB_V3.insert_user_setting(1,'Nan','Dark')
                 print("btn from Dark")
                 self.system_theme = system_theme
-                self.addBtns(DB_V2.select_all_data(),"Dark")
+                self.addBtns(DB_V3.get_folders(),"Dark")
 
                 self.access_grid_layout_elements(self.gridLayout_102)
                 self.access_grid_layout_elements(self.gridLayout_103)
@@ -291,19 +316,31 @@ class MainWindow(QMainWindow):
                     CheckBox.setStyleSheet('border: none;')
 
                 for label in all_label:
-                    if label.objectName() == 'SevLabel':
-                        label.setStyleSheet('color: black;border: none;background-color: rgb(145, 36, 62); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
+                    if label.objectName() == "INFO":
+                        label.setStyleSheet('color: black;border: none;background-color: rgb(77, 149, 202); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
                         continue
-
+                    if label.objectName() == "LOW":
+                        label.setStyleSheet('color: black;border: none;background-color: rgb(248, 200, 81); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
+                        continue
+                    if label.objectName() == "MEDIUM":
+                        label.setStyleSheet('color: black;border: none;background-color: rgb(255, 161, 94); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
+                        continue
+                    if label.objectName() == "HIGH":
+                        label.setStyleSheet('color: black;border: none;background-color: rgb(255, 89, 89); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
+                        continue
+                    if label.objectName() == "CRITICAL":
+                        label.setStyleSheet('color: black;border: none;background-color: rgb(204, 18, 70); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
+                        continue
                     label.setStyleSheet('color: white; border: none;font-size: 13px; font-weight: bold;')
                 return
             else:
                 self.load_stylesheet("light_theme.qss")
                 system_theme = "Light"
-                DB_V2.insert_theme_data("Light")
+                DB_V3.insert_user_setting(1,'Nan','Light')
+
                 print("btn from Light")
                 self.system_theme = system_theme
-                self.addBtns(DB_V2.select_all_data(),"Light")
+                self.addBtns(DB_V3.get_folders(),"Light")
 
                 self.access_grid_layout_elements(self.gridLayout_102)
                 self.access_grid_layout_elements(self.gridLayout_103)
@@ -341,14 +378,26 @@ class MainWindow(QMainWindow):
 
 
                 for label in all_label:
-                    if label.objectName() == 'SevLabel':
-                        label.setStyleSheet('color: black;border: none;background-color: rgb(145, 36, 62); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
+                    if label.objectName() == "INFO":
+                        label.setStyleSheet('color: black;border: none;background-color: rgb(77, 149, 202); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
+                        continue
+                    if label.objectName() == "LOW":
+                        label.setStyleSheet('color: black;border: none;background-color: rgb(248, 200, 81); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
+                        continue
+                    if label.objectName() == "MEDIUM":
+                        label.setStyleSheet('color: black;border: none;background-color: rgb(255, 161, 94); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
+                        continue
+                    if label.objectName() == "HIGH":
+                        label.setStyleSheet('color: black;border: none;background-color: rgb(255, 89, 89); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
+                        continue
+                    if label.objectName() == "CRITICAL":
+                        label.setStyleSheet('color: black;border: none;background-color: rgb(204, 18, 70); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
                         continue
                     label.setStyleSheet('color: black; border: none;font-size: 13px;')
                 return
 
         system_theme = self.get_windows_theme()
-        Theme = DB_V2.get_theme_data()
+        Theme = DB_V3.get_user_setting(1)
         if Theme:
             if Theme == "Light":
                 self.load_stylesheet("light_theme.qss")
@@ -406,7 +455,7 @@ class MainWindow(QMainWindow):
                 self.BackBtn.clicked.connect(button.click)
 
     def BackFromOWASPBtn(self):
-        data = DB_V2.select_all_data()
+        data = DB_V3.get_folders()
         self.FolderInput.addItem('My Scans')
         for i in data:
             self.FolderInput.addItem(i[1])
@@ -462,19 +511,29 @@ class MainWindow(QMainWindow):
                         center_slice = self.get_pie_series(chart)
 
                         if self.system_theme == "Light":
-                            center_slice[0].setBrush(QColor(255,255,255))
-                            center_slice[0].setBorderColor(QColor(255,255,255))
-
+                            center_slice[0].setBrush(QColor(255, 255, 255))
+                            center_slice[0].setBorderColor(QColor(255, 255, 255))
+                            print("Critical Light")
                             widget.setStyleSheet('background-color: white;')
-                            chart.setBackgroundBrush(QColor(255,255,255))
+                            chart.setBackgroundBrush(QColor(255, 255, 255))
+                            
+                            legend_labels = chart.legend().markers()
+                            for label in legend_labels:
+                                label.setLabelBrush(QBrush(Qt.black))
                         else:
+                            print("Critical Dark")
                             center_slice[0].setBrush(QColor(36, 45, 59))
                             center_slice[0].setBorderColor(QColor(36, 45, 59))
-                            widget.setStyleSheet('background-color: rgb(36, 45, 59); color: red;')
+                            widget.setStyleSheet('background-color: rgb(36, 45, 59);')
                             chart.setBackgroundBrush(QColor(36, 45, 59))
+
+                            legend_labels = chart.legend().markers()
+                            for label in legend_labels:
+                                label.setLabelBrush(QBrush(Qt.white))
                     elif widget:
                         if hasattr(widget, 'text'):
                             print(f"Widget at ({row}, {col}): {widget.text()}")
+
 
     def circleChart(self, target_layout, info, low, medium, high, critical):
         self.series = QPieSeries()
@@ -490,11 +549,11 @@ class MainWindow(QMainWindow):
         self.slice4.setBrush(QColor(248, 200, 81))
         self.slice5.setBrush(QColor(103, 172, 225))
 
-        self.slice1.setBorderWidth(2)  # Remove the border
-        self.slice2.setBorderWidth(2)  # Remove the border
-        self.slice3.setBorderWidth(2)  # Remove the border
-        self.slice4.setBorderWidth(2)  # Remove the border
-        self.slice5.setBorderWidth(2)  # Remove the border
+        self.slice1.setBorderWidth(2)
+        self.slice2.setBorderWidth(2)
+        self.slice3.setBorderWidth(2)
+        self.slice4.setBorderWidth(2)
+        self.slice5.setBorderWidth(2)
 
 
         self.slice1.setBorderColor(QColor(145, 36, 62))
@@ -503,11 +562,13 @@ class MainWindow(QMainWindow):
         self.slice4.setBorderColor(QColor(248, 200, 81))
         self.slice5.setBorderColor(QColor(103, 172, 225))
 
+
         self.chart = QChart()
         self.chart.addSeries(self.series)
         self.chart.setAnimationOptions(QChart.SeriesAnimations)
         self.chart.legend().setAlignment(Qt.AlignRight)
 
+    
         font = self.chart.legend().font()
         font.setPointSize(12)
         self.chart.legend().setFont(font)
@@ -547,8 +608,11 @@ class MainWindow(QMainWindow):
     def showPercentage(self, slice, state):
         if state:  # If hovered
             total = sum([s.value() for s in self.series.slices()])
-            percentage = (slice.value() / total) * 100
-            QToolTip.showText(QCursor.pos(), f'{percentage:.2f}%')
+            try:
+                percentage = (slice.value() / total) * 100
+                QToolTip.showText(QCursor.pos(), f'{percentage:.2f}%')
+            except:
+                pass
 
     def hide_if_zero(self, label, num):
         if num == 0:
@@ -699,6 +763,8 @@ class MainWindow(QMainWindow):
             return
         else:
             for i in folderNames:
+                if i[1] == "My Scans":
+                    continue
                 self.new_btn = QPushButton(f"{i[1]}", self)
                 self.new_btn.setObjectName(i[1])
                 self.new_btn.setCheckable(True)
@@ -795,18 +861,26 @@ class MainWindow(QMainWindow):
         self.MyAccountBtn.hide()
         self.AboutBtn.hide()
         self.ThemeBtn.hide()
+        folder_name = ''
+        if btn.objectName() == "MyScansBtn":
+            folder_id = DB_V3.get_folder_id_by_name('My Scans')
+            folder_name = 'My Scans'
+        else:
+            folder_id = DB_V3.get_folder_id_by_name(btn.objectName())
+        folder_data = DB_V3.get_scans_by_folder_id(folder_id)
+
         if btn.objectName() == "AllScansBtn":
             self.stackedWidget.setCurrentIndex(3)
-            if DB_V2.check_if_scans_exist():
+            if DB_V3.check_if_scans_exist():
                 self.create_table_scans("All")
             else:
                 self.stackedWidget.setCurrentIndex(0)             # if not find any scan for this folder
-        elif btn.objectName() == "MyScansBtn": # if find any scan for this folder
+        elif folder_name == "My Scans" and folder_data: # if find any scan for this folder
             self.stackedWidget.setCurrentIndex(3)
             self.create_table_scans('My Scans')
             self.BackBtn.setText("")
 
-        elif DB_V2.get_data_by_folder_name(btn.objectName()): # if find any scan for this folder
+        elif folder_data: # if find any scan for this folder
             self.stackedWidget.setCurrentIndex(3)
             self.create_table_scans(btn.objectName())
             self.BackBtn.setText("")
@@ -834,7 +908,7 @@ class MainWindow(QMainWindow):
             pass
         return super().eventFilter(source, event)
 
-    def create_table_scans_for_vulnerability(self):
+    def create_table_scans_for_vulnerability(self, scan_data):
         spacer = QSpacerItem(20, 40, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
 
         ParentLayout = QGridLayout()         #######> this is the main layout that all windget inside it 
@@ -934,100 +1008,113 @@ class MainWindow(QMainWindow):
         MainVLayout.addWidget(self.Widget1)
         MainVLayout.setContentsMargins(0,9,0,0)
 
-        for i in range(2):
-            SevLayout = QHBoxLayout()
-            ChildCheckBox = QCheckBox()
-            SevLabel = QLabel(f"CRETICAL")
-            SevLabel.setObjectName('SevLabel')
-            SevLabel.setFixedSize(57, 22)
-            ChildCheckBox.setStyleSheet('border: none; ')
-            SevLabel.setAlignment(Qt.AlignCenter)
+        ScansIds = DB_V3.get_all_scan_ids()
+        for ScanId in ScansIds:
+            VulnerabilityIds = DB_V3.get_vulnerability_ids_by_scan_id(ScanId)
+            for VulnerabilityId in VulnerabilityIds:
+                VulnData = DB_V3.get_vulnerability_by_id(VulnerabilityId)
+                SevLayout = QHBoxLayout()
+                ChildCheckBox = QCheckBox()
+                SevLabel = QLabel(f"{VulnData['severity']}")
+                SevLabel.setObjectName(f"{VulnData['severity']}")
+                SevLabel.setFixedSize(57, 22)
+                ChildCheckBox.setStyleSheet('border: none; ')
+                SevLabel.setAlignment(Qt.AlignCenter)
+
+                SevLayout.addWidget(ChildCheckBox)
+                SevLayout.addWidget(SevLabel)
+                SevLayout.addItem(spacer)
+                SevLayout.setStretch(0,0)
+                SevLayout.setStretch(1,1)
+                SevLayout.setSpacing(20)
 
 
-            SevLayout.addWidget(ChildCheckBox)
-            SevLayout.addWidget(SevLabel)
-            SevLayout.addItem(spacer)
-            SevLayout.setStretch(0,0)
-            SevLayout.setStretch(1,1)
-            SevLayout.setSpacing(20)
+                VulNameLayout = QHBoxLayout()
+                VulnNameBtn = QPushButton(f"{VulnData['name']}")
+                VulNameLayout.addWidget(VulnNameBtn)
 
 
-            VulNameLayout = QHBoxLayout()
-            VulnNameBtn = QPushButton(f"Reflected XSS")
-            VulNameLayout.addWidget(VulnNameBtn)
+                VulnNameBtn.clicked.connect(lambda: self.show_vuln_info(VulnData))
+
+                VulnFamilyLayout = QHBoxLayout()
+                VulnFamilyLabel = QLabel(f"{VulnData['name']}")
+                VulnFamilyLayout.addWidget(VulnFamilyLabel)
 
 
-            VulnNameBtn.clicked.connect(lambda: self.show_vuln_info("Reflected XSS"))
-
-            VulnFamilyLayout = QHBoxLayout()
-            VulnFamilyLabel = QLabel(f"Cross Site Scripting")
-            VulnFamilyLayout.addWidget(VulnFamilyLabel)
+                VulnCountLayout = QHBoxLayout()
+                VulnCountLabel = QLabel(f"1")
+                VulnCountLayout.addWidget(VulnCountLabel)
 
 
-            VulnCountLayout = QHBoxLayout()
-            VulnCountLabel = QLabel(f"1")
-            VulnCountLayout.addWidget(VulnCountLabel)
+                BtnsLayout = QHBoxLayout()
+
+                EditVulnBtn = QPushButton()
+                EditVulnBtn.setObjectName('EditVulnBtn')
+                EditVulnBtn.setIcon(QIcon('png/pen.png'))
+                EditVulnBtn.setIconSize(QSize(18, 18))  # Set the size of the icon (optional)
+
+                EditVulnBtn.setStyleSheet('''
+                    QPushButton:hover{border:none; font-size: 25px; margin-left: 40px;color: rgb(165, 165, 165);}
+                    QPushButton{border:none; font-size: 25px; margin-left: 40px;color: rgb(217, 217, 217);}
+                    ''')
+                font = QFont("Sitka Subheading Semibold")
+                EditVulnBtn.setFont(font)
+                EditVulnBtn.setObjectName(f"test5")
+
+                # EditVulnBtn.clicked.connect(self.CancelScan)
+
+                BtnsLayout.addWidget(EditVulnBtn)
 
 
-            BtnsLayout = QHBoxLayout()
-
-            EditVulnBtn = QPushButton()
-            EditVulnBtn.setObjectName('EditVulnBtn')
-            EditVulnBtn.setIcon(QIcon('png/pen.png'))
-            EditVulnBtn.setIconSize(QSize(18, 18))  # Set the size of the icon (optional)
-
-            EditVulnBtn.setStyleSheet('''
-                QPushButton:hover{border:none; font-size: 25px; margin-left: 40px;color: rgb(165, 165, 165);}
-                QPushButton{border:none; font-size: 25px; margin-left: 40px;color: rgb(217, 217, 217);}
-                ''')
-            font = QFont("Sitka Subheading Semibold")
-            EditVulnBtn.setFont(font)
-            EditVulnBtn.setObjectName(f"test5")
-
-            # EditVulnBtn.clicked.connect(self.CancelScan)
-
-            BtnsLayout.addWidget(EditVulnBtn)
-
-
-            MainLayout = QGridLayout()
-            # MainLayout.setContentsMargins(10, 0, 20, 0)
+                MainLayout = QGridLayout()
+                # MainLayout.setContentsMargins(10, 0, 20, 0)
 
 
 
-            MainLayout.addLayout(SevLayout       ,0, 0)
-            MainLayout.addLayout(VulNameLayout   ,0, 1)
-            MainLayout.addLayout(VulnFamilyLayout,0, 2)
-            MainLayout.addLayout(VulnCountLayout ,0, 3)
-            MainLayout.addLayout(BtnsLayout      ,0, 4)
+                MainLayout.addLayout(SevLayout       ,0, 0)
+                MainLayout.addLayout(VulNameLayout   ,0, 1)
+                MainLayout.addLayout(VulnFamilyLayout,0, 2)
+                MainLayout.addLayout(VulnCountLayout ,0, 3)
+                MainLayout.addLayout(BtnsLayout      ,0, 4)
 
 
-            MainLayout.setColumnStretch(0, 5)
-            MainLayout.setColumnStretch(1, 12)
-            MainLayout.setColumnStretch(2, 13)
-            MainLayout.setColumnStretch(3, 4)
-            MainLayout.setColumnStretch(4, 1)
+                MainLayout.setColumnStretch(0, 5)
+                MainLayout.setColumnStretch(1, 12)
+                MainLayout.setColumnStretch(2, 13)
+                MainLayout.setColumnStretch(3, 4)
+                MainLayout.setColumnStretch(4, 1)
 
-            self.Widget2 = QWidget(self)
-            self.Widget2.setObjectName("DownWidget")
-            if self.system_theme == "Light":
-                VulnNameBtn.setStyleSheet('QPushButton{border:none; text-align: left;background-color white; color: black;} QPushButton:hover{text-decoration: underline; color: rgb(56, 109, 156);}')
-                SevLabel.setStyleSheet('color: black;border: none;background-color: rgb(145, 36, 62); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
-                VulnFamilyLabel.setStyleSheet('color: black;border: none;font-weight: normal;')
-                VulnCountLabel.setStyleSheet('color: black;border: none; text-align: center;')
-                self.Widget2.setStyleSheet("border: 1px solid rgb(221, 221, 221); background-color: white;font-size: 13px;")
-            else:
-                VulnNameBtn.setStyleSheet('QPushButton{border:none; text-align: left;background-color rgb(48, 57, 69); color: white;} QPushButton:hover{text-decoration: underline; color: rgb(56, 109, 156);}')
-                SevLabel.setStyleSheet('color: black;border: none;background-color: rgb(145, 36, 62); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
-                VulnFamilyLabel.setStyleSheet('color: white;border: none;')
-                VulnCountLabel.setStyleSheet('color: white;border: none; text-align: center;')
-                self.Widget2.setStyleSheet("border: 1px solid rgb(72, 73, 80); background-color: rgb(48, 57, 69);font-size: 13px;")
+                self.Widget2 = QWidget(self)
+                self.Widget2.setObjectName("DownWidget")
+
+                if SevLabel.objectName() == "INFO":
+                    SevLabel.setStyleSheet('color: black;border: none;background-color: rgb(77, 149, 202); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
+                if SevLabel.objectName() == "LOW":
+                    SevLabel.setStyleSheet('color: black;border: none;background-color: rgb(248, 200, 81); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
+                if SevLabel.objectName() == "MEDIUM":
+                    SevLabel.setStyleSheet('color: black;border: none;background-color: rgb(255, 161, 94); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
+                if SevLabel.objectName() == "HIGH":
+                    SevLabel.setStyleSheet('color: black;border: none;background-color: rgb(255, 89, 89); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
+                if SevLabel.objectName() == "CRITICAL":
+                    SevLabel.setStyleSheet('color: black;border: none;background-color: rgb(204, 18, 70); color: white; border-radius: 4px; font-size: 10px; font-weight: normal;')
+
+                if self.system_theme == "Light":
+                    VulnNameBtn.setStyleSheet('QPushButton{border:none; text-align: left;background-color white; color: black;} QPushButton:hover{text-decoration: underline; color: rgb(56, 109, 156);}')
+                    VulnFamilyLabel.setStyleSheet('color: black;border: none;font-weight: normal;')
+                    VulnCountLabel.setStyleSheet('color: black;border: none; text-align: center;')
+                    self.Widget2.setStyleSheet("border: 1px solid rgb(221, 221, 221); background-color: white;font-size: 13px;")
+                else:
+                    VulnNameBtn.setStyleSheet('QPushButton{border:none; text-align: left;background-color rgb(48, 57, 69); color: white;} QPushButton:hover{text-decoration: underline; color: rgb(56, 109, 156);}')
+                    VulnFamilyLabel.setStyleSheet('color: white;border: none;')
+                    VulnCountLabel.setStyleSheet('color: white;border: none; text-align: center;')
+                    self.Widget2.setStyleSheet("border: 1px solid rgb(72, 73, 80); background-color: rgb(48, 57, 69);font-size: 13px;")
 
 
-            self.Widget2.setMinimumHeight(48)
-            self.Widget2.setMaximumHeight(48)
+                self.Widget2.setMinimumHeight(48)
+                self.Widget2.setMaximumHeight(48)
 
-            self.Widget2.setLayout(MainLayout)  # set layout of Widget2 with his elements
-            MainVLayout.addWidget(self.Widget2)
+                self.Widget2.setLayout(MainLayout)  # set layout of Widget2 with his elements
+                MainVLayout.addWidget(self.Widget2)
 
 
         self.MainWidget = QWidget(self) # Create Main widget 
@@ -1036,7 +1123,7 @@ class MainWindow(QMainWindow):
         self.MainWidget.setLayout(MainVLayout) # add the main Virtical layout that contain all widget with his elements 
 
 
-        self.gridLayout_64.addWidget(self.MainWidget)  # Add button to row 0, column 0
+        self.VulnScrollArea.setWidget(self.MainWidget)  # Add button to row 0, column 0
 
     def create_table_scans(self, FolderName):
         ParentLayout = QGridLayout()         #######> this is the main layout that all windget inside it 
@@ -1129,9 +1216,10 @@ class MainWindow(QMainWindow):
         MainVLayout.addWidget(self.Widget2)
         
         if FolderName == "All":
-            data = DB_V2.get_all_data()
+            data = DB_V3.get_all_scans()
         else:
-            data = DB_V2.get_data_by_folder_name(FolderName)
+            folder_id = DB_V3.get_folder_id_by_name(FolderName)
+            data = DB_V3.get_scans_by_folder_id(folder_id)
         self.ChildCheckBoxes = []
         for i in data:
             NameLayout = QHBoxLayout()
@@ -1152,13 +1240,13 @@ class MainWindow(QMainWindow):
 
 
             LastModifyLayout = QHBoxLayout()
-            self.LabelText = f'<span style=" display:inline-block; white-space:nowrap;font-size: 20px; ">🗸</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style=" font-size: 13px;">{i[3]}</span>'
+            self.LabelText = f'<span style=" display:inline-block; white-space:nowrap;font-size: 20px; ">🗸</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style=" font-size: 13px;">{i[8]}</span>'
             self.LastModifyLabel = QLabel(f"{self.LabelText}")
             LastModifyLayout.addWidget(self.LastModifyLabel)
 
 
             ScheduleLayout = QHBoxLayout()
-            self.ScheduleLabel = QLabel(f"{i[2]}")
+            self.ScheduleLabel = QLabel(f"On Demand")
             ScheduleLayout.addWidget(self.ScheduleLabel)
 
 
@@ -1253,21 +1341,28 @@ class MainWindow(QMainWindow):
             self.ScrollArea.setStyleSheet("background-color: white;border: none;")
         else:
             self.ScrollArea.setStyleSheet("background-color: rgb(36, 45, 59);border: none;")
-        # self.SearchFindLabel.setText(f"{len(self.child_checkboxes)} Scans")
-        # self.SearchFindLabel2.setText(f"{len(self.child_checkboxes)} Scans")
-        # self.SearchFindLabel3.setText(f"{len(self.child_checkboxes)} Scans")
-        # self.checkbox.stateChanged.connect(self.mark_all_checkBoxes)
 
     def host_in_details(self):
-        self.HostInDesailsTopWidget.setMinimumHeight(37)
-        self.HostInDesailsTopWidget.setMaximumHeight(37)
-        self.HostInDesailsBottomWidget.setMinimumHeight(48)
-        self.HostInDesailsBottomWidget.setMaximumHeight(48)
         self.stackedWidget.setCurrentIndex(4)
+        while self.gridLayout_44.count():
+            item = self.gridLayout_44.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()
+            else:
+                # Handle spacers or other items
+                del item
+
         btn = self.sender()
-        domain_name = self.extract_domain(DB_V2.get_scan_by_name(btn.objectName())[6])
-        self.VulnBtn.setText(f"{domain_name}")
-        self.VulnBtn.clicked.connect(lambda: self.HostInDesailsWidget.setCurrentIndex(1))
+        scan_data = DB_V3.get_scan_by_name(btn.objectName())
+        scan_id = DB_V3.get_scan_id_by_name(btn.objectName())
+        domain_name = self.extract_domain(scan_data[0][5])
+        find_vul =  DB_V3.get_vulnerability_ids_by_scan_id(scan_id)
+
+
+# ######################################################################
+        # self.VulnBtn.clicked.connect(lambda: self.HostInDesailsWidget.setCurrentIndex(1))
+
         all_buttons = self.SideBar.findChildren(QPushButton)
         for button in all_buttons:
             if button.isChecked():
@@ -1280,14 +1375,338 @@ class MainWindow(QMainWindow):
 
                 self.BackBtn.clicked.connect(button.click)
 
-    def show_vuln_info(self, VulnName):
+# ######################################################################
+
+        if find_vul:
+# ######################################################################
+            ParentLayout = QGridLayout()         #######> this is the main layout that all windget inside it 
+            MainVLayout = QVBoxLayout()  # create virtival layout to add all widget virticaly and set it as main layout for main widget 
+            MainVLayout.setSpacing(0)
+            ParentLayout.setContentsMargins(0, 0, 0, 0)
+
+            HLayout = QHBoxLayout()
+            self.CheckBox = QCheckBox()
+            self.HostLabel = QLabel("Host")
+
+            HLayout.addWidget(self.CheckBox)
+            HLayout.addWidget(self.HostLabel)
+            HLayout.setStretch(0,0)
+            HLayout.setStretch(1,1)
+            HLayout.setSpacing(20)
+
+
+            HLayout2 = QHBoxLayout()
+            self.VulnerabilitesLabel = QLabel("Vulnerabilites")
+            HLayout2.addWidget(self.VulnerabilitesLabel)
+
+            MainLayout = QGridLayout()
+            MainLayout.setContentsMargins(10, 0, 20, 0)
+
+            MainLayout.addLayout(HLayout,    0, 0)
+            MainLayout.addLayout(HLayout2,   0, 1)
+
+            MainLayout.setColumnStretch(0, 1)
+            MainLayout.setColumnStretch(1, 3)
+
+            self.Widget2 = QWidget(self)
+            self.Widget2.setMinimumHeight(37)
+            self.Widget2.setMaximumHeight(37)
+
+            if self.system_theme == "Light":
+                self.Widget2.setStyleSheet(f'background-color: rgb(30,50,30);color; black;')
+                self.Widget2.setStyleSheet("border: 1px solid rgb(221, 221, 221); height: 35px; background-color: rgb(245, 245, 245);font-size: 13px; font-weight: bold;color; black;")
+                self.CheckBox.setStyleSheet('border-left: none;border-right: none; color; black;')
+                self.HostLabel.setStyleSheet('border-left: none;border-right: none;color; black; ')
+                self.VulnerabilitesLabel.setStyleSheet('border-left: none;border-right: none;color; black; ')
+            else:
+                self.Widget2.setStyleSheet(f'background-color: rgb(72, 83, 98); color: rgb(216, 222, 233);')
+                self.Widget2.setStyleSheet("border: 1px solid rgb(74, 78, 88); height: 35px; background-color: rgb(72, 83, 98);font-size: 13px; font-weight: bold;")
+                self.CheckBox.setStyleSheet('border-left: none;border-right: none; color; black;')
+
+                self.HostLabel.setStyleSheet('QLabel{border-left: none;border-right: none;color: rgb(216, 222, 233);} ')
+                self.VulnerabilitesLabel.setStyleSheet('border-left: none;border-right: none; color: rgb(216, 222, 233); ')
+
+            self.Widget2.setLayout(MainLayout)  # set layout of Widget2 with his elements
+
+            MainVLayout.addLayout(ParentLayout)
+            MainVLayout.addWidget(self.Widget2)
+            
+            for i in scan_data:
+                NameLayout = QHBoxLayout()
+                self.ChildCheckBox = QCheckBox()
+                self.NameBtn = QPushButton(f"{i[1]}")
+
+                NameLayout.addWidget(self.ChildCheckBox)
+                NameLayout.addWidget(self.NameBtn)
+                NameLayout.setStretch(0,0)
+                NameLayout.setStretch(1,1)
+                NameLayout.setSpacing(20)
+
+                self.NameBtn.setObjectName(f"{i[1]}")
+
+                # self.NameBtn.clicked.connect(self.host_in_details)
+                self.NameBtn.clicked.connect(lambda: self.HostInDesailsWidget.setCurrentIndex(1))
+
+
+                LastModifyLayout = QHBoxLayout()
+                self.LabelText = f'<span style=" display:inline-block; white-space:nowrap;font-size: 20px; ">🗸</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style=" font-size: 13px;">{i[8]}</span>'
+                self.LastModifyLabel = QLabel(f"{self.LabelText}")
+                LastModifyLayout.addWidget(self.LastModifyLabel)
+
+                MainLayout = QGridLayout()
+                MainLayout.setContentsMargins(10, 0, 20, 0)
+
+
+
+                MainLayout.addLayout(NameLayout      , 0, 0)
+                MainLayout.addLayout(LastModifyLayout, 0, 1)
+
+                MainLayout.setColumnStretch(0,1)
+                MainLayout.setColumnStretch(1,3)
+
+                print(i)
+
+                info     = 0
+                low      = 0
+                medium   = 0
+                high     = 0
+                critical = 0
+                ScansResult = DB_V3.get_scan_results_by_scan_id(i[0])
+                for scan in ScansResult:
+                    VulnerabilityIds = DB_V3.get_vulnerability_ids_by_scan_id(scan[2])
+                    for VulnerabilityId in VulnerabilityIds:
+                        VulnData = DB_V3.get_vulnerability_by_id(VulnerabilityId)
+                        print(VulnData)
+                        if VulnData['severity'] == "INFO":
+                            info += 1
+                        if VulnData['severity'] == "LOW":
+                            low += 1
+                        if VulnData['severity'] == "MEDIUM":
+                            medium += 1
+                        if VulnData['severity'] == "HIGH":
+                            high += 1
+                        if VulnData['severity'] == "CRITICAL":
+                            critical += 1
+
+                print(info)
+                print(low)
+                print(medium)
+                print(high)
+                print(critical)
+
+                self.Widget2 = QWidget(self)
+
+
+                if self.system_theme == "Light":
+                    self.ChildCheckBox.setStyleSheet('border-left: none; border-right: none;')
+                    self.NameBtn.setStyleSheet('''
+                        QPushButton{border-left: none;border-right: none;text-align: left; color: black;}
+                        QPushButton:hover{text-decoration: underline; color: rgb(56, 109, 156);}
+                        ''')
+                    self.LastModifyLabel.setStyleSheet('border-left: none;border-right: none; color: black;')
+                    self.Widget2.setStyleSheet("background-color: white;border: 1px solid rgb(221, 221, 221); height: 60px; font-size: 12px; ")
+                else:
+                    self.ChildCheckBox.setStyleSheet('border-left: none; border-right: none;')
+                    self.NameBtn.setStyleSheet('''
+                        QPushButton{border-left: none;border-right: none;text-align: left; color: White;}
+                        QPushButton:hover{text-decoration: underline; color: rgb(37, 210, 227);}
+                        ''')
+                    self.LastModifyLabel.setStyleSheet('border-left: none;border-right: none;  color:  White;')
+                    self.Widget2.setStyleSheet("background-color: rgb(49, 58, 70);border: 1px solid rgb(77, 80, 90); height: 60px; font-size: 12px; ")
+
+
+
+                self.Widget2.setLayout(MainLayout)  # set layout of Widget2 with his elements
+                self.Widget2.setMinimumHeight(48)
+                self.Widget2.setMaximumHeight(48)
+                MainVLayout.addWidget(self.Widget2)
+
+
+
+            self.MainWidget = QWidget(self) # Create Main widget 
+            spacer = QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+            MainVLayout.addItem(spacer)
+            MainVLayout.setContentsMargins(0,0,20,0)
+
+            self.MainWidget.setLayout(MainVLayout) # add the main Virtical layout that contain all widget with his elements 
+
+            self.gridLayout_44.addWidget(self.MainWidget)
+
+            self.create_table_scans_for_vulnerability(scan_data)
+            # if self.system_theme == "Light":
+                # self.ScrollArea.setStyleSheet("background-color: white;border: none;")
+            # else:
+                # self.ScrollArea.setStyleSheet("background-color: rgb(36, 45, 59);border: none;")
+
+# ######################################################################
+        else:
+            emptyScanFrame = QFrame()
+            layout = QVBoxLayout()
+            emptyScanLabel  = QLabel("No hosts are available.")
+            emptyScanLabel.setStyleSheet('color: rgb(215, 215, 214); font-size: 13px; border: none;')
+            emptyScanLabel.setAlignment(Qt.AlignCenter)  # Center-align the text
+            layout.addWidget(emptyScanLabel)
+            emptyScanFrame.setLayout(layout)
+            emptyScanFrame.setStyleSheet('border-radius: 4px; border: 1px solid rgb(72, 76, 86);')
+            emptyScanFrame.setMinimumHeight(40)
+            emptyScanFrame.setMaximumHeight(40)
+            self.gridLayout_44.addWidget(emptyScanFrame)
+            self.historyTab(scan_data)
+            
+    def historyTab(self, scan_data):
+        self.stackedWidget.setCurrentIndex(4)
+        while self.gridLayout_104.count():
+            item = self.gridLayout_104.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()
+            else:
+                # Handle spacers or other items
+                del item
+
+
+        self.HostInDesailsWidget.setCurrentIndex(3)
+        ParentLayout = QGridLayout()         #######> this is the main layout that all windget inside it 
+        MainVLayout = QVBoxLayout()  # create virtival layout to add all widget virticaly and set it as main layout for main widget 
+        MainVLayout.setSpacing(0)
+        ParentLayout.setContentsMargins(0, 0, 0, 0)
+
+        HLayout = QHBoxLayout()
+        self.CheckBox = QCheckBox()
+        self.StartTimeLabel = QLabel("Start Time")
+
+        HLayout.addWidget(self.CheckBox)
+        HLayout.addWidget(self.StartTimeLabel)
+        HLayout.setStretch(0,0)
+        HLayout.setStretch(1,1)
+        HLayout.setSpacing(20)
+
+
+        HLayout2 = QHBoxLayout()
+        self.LastScannedLabel = QLabel("        Last Scanned")
+        HLayout2.addWidget(self.LastScannedLabel)
+
+        HLayout3 = QHBoxLayout()
+        self.StatusLabel = QLabel("           Status")
+        HLayout3.addWidget(self.StatusLabel)
+
+        MainLayout = QGridLayout()
+        MainLayout.setContentsMargins(10, 0, 20, 0)
+
+        MainLayout.addLayout(HLayout,    0, 0)
+        MainLayout.addLayout(HLayout2,   0, 2)
+        MainLayout.addLayout(HLayout3,   0, 3)
+
+        MainLayout.setColumnStretch(0, 0)
+        MainLayout.setColumnStretch(1, 3)
+        MainLayout.setColumnStretch(2, 3)
+        MainLayout.setColumnStretch(3, 2)
+
+        self.Widget2 = QWidget(self)
+        self.Widget2.setMinimumHeight(37)
+        self.Widget2.setMaximumHeight(37)
+
+        if self.system_theme == "Light":
+            self.Widget2.setStyleSheet(f'background-color: rgb(30,50,30);color; black;')
+            self.Widget2.setStyleSheet("border: 1px solid rgb(221, 221, 221); height: 35px; background-color: rgb(245, 245, 245);font-size: 13px; font-weight: bold;color; black;")
+            self.CheckBox.setStyleSheet('border-left: none;border-right: none; color; black;')
+            self.StartTimeLabel.setStyleSheet('border-left: none;border-right: none;color; black; ')
+            self.LastScannedLabel.setStyleSheet('border-left: none;border-right: none;color; black; ')
+            self.StatusLabel.setStyleSheet('border-left: none;border-right: none;color; black; ')
+        else:
+            self.Widget2.setStyleSheet(f'background-color: rgb(72, 83, 98); color: rgb(216, 222, 233);')
+            self.Widget2.setStyleSheet("border: 1px solid rgb(74, 78, 88); height: 35px; background-color: rgb(72, 83, 98);font-size: 13px; font-weight: bold;")
+            self.CheckBox.setStyleSheet('border-left: none;border-right: none; color; black;')
+
+            self.StartTimeLabel.setStyleSheet('QLabel{border-left: none;border-right: none;color: rgb(216, 222, 233);} ')
+            self.StatusLabel.setStyleSheet('border-left: none;border-right: none; color: rgb(216, 222, 233); ')
+            self.LastScannedLabel.setStyleSheet('border-left: none;border-right: none; color: rgb(216, 222, 233); ')
+
+        self.Widget2.setLayout(MainLayout)  # set layout of Widget2 with his elements
+
+        MainVLayout.addLayout(ParentLayout)
+        MainVLayout.addWidget(self.Widget2)
+        
+        for i in scan_data:
+            NameLayout = QHBoxLayout()
+            self.ChildCheckBox = QCheckBox()
+            self.StartTimeLabel = QLabel(f"{i[8]}")
+
+            NameLayout.addWidget(self.ChildCheckBox)
+            NameLayout.addWidget(self.StartTimeLabel)
+            NameLayout.setStretch(0,0)
+            NameLayout.setStretch(1,1)
+            NameLayout.setSpacing(20)
+
+            self.StartTimeLabel.setObjectName(f"{i[1]}")
+
+            LastModifyLayout = QHBoxLayout()
+            self.LastScannedLabel = QLabel(f"{i[8]}")
+            LastModifyLayout.addWidget(self.LastScannedLabel)
+
+            StatusLayout = QHBoxLayout()
+            self.LabelText = f'<span style="color:rgb(162, 176, 211);display:inline-block; white-space:nowrap;font-size: 15px; ">🛇</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style=" font-size: 13px;">Canceled</span>'
+            self.label_107.setText(f"{i[8]}")
+            self.label_109.setText(f"{i[8]}")
+            self.StatusLabel = QLabel(f"{self.LabelText}")
+            StatusLayout.addWidget(self.StatusLabel)
+
+            MainLayout = QGridLayout()
+            MainLayout.setContentsMargins(10, 0, 20, 0)
+
+
+
+            MainLayout.addLayout(NameLayout      , 0, 0)
+            MainLayout.addLayout(LastModifyLayout, 0, 2)
+            MainLayout.addLayout(StatusLayout    , 0, 3)
+
+            MainLayout.setColumnStretch(0, 0)
+            MainLayout.setColumnStretch(1, 3)
+            MainLayout.setColumnStretch(2, 3)
+            MainLayout.setColumnStretch(3, 2)
+
+            self.Widget2 = QWidget(self)
+
+
+            if self.system_theme == "Light":
+                self.ChildCheckBox.setStyleSheet('border-left: none; border-right: none;')
+                self.StartTimeLabel.setStyleSheet('''
+                        border-left: none;border-right: none; color: black;
+                    ''')
+                self.LastScannedLabel.setStyleSheet('border-left: none;border-right: none; color: black;')
+                self.StatusLabel.setStyleSheet('border-left: none;border-right: none; color: black;')
+                self.Widget2.setStyleSheet("background-color: white;border: 1px solid rgb(221, 221, 221); height: 60px; font-size: 12px; ")
+            else:
+                self.ChildCheckBox.setStyleSheet('border-left: none; border-right: none;')
+                self.StartTimeLabel.setStyleSheet('''
+                        border-left: none;border-right: none; color: white;
+                    ''')
+                self.LastScannedLabel.setStyleSheet('border-left: none;border-right: none;  color:  White;')
+                self.StatusLabel.setStyleSheet('border-left: none;border-right: none;  color:  White;')
+                self.Widget2.setStyleSheet("background-color: rgb(49, 58, 70);border: 1px solid rgb(77, 80, 90); height: 60px; font-size: 12px; ")
+
+
+
+            self.Widget2.setLayout(MainLayout)  # set layout of Widget2 with his elements
+            self.Widget2.setMinimumHeight(48)
+            self.Widget2.setMaximumHeight(48)
+            MainVLayout.addWidget(self.Widget2)
+
+
+
+        self.MainWidget = QWidget(self) # Create Main widget 
+        spacer = QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        MainVLayout.addItem(spacer)
+        MainVLayout.setContentsMargins(0,0,20,0)
+
+        self.MainWidget.setLayout(MainVLayout) # add the main Virtical layout that contain all widget with his elements 
+
+        self.gridLayout_104.addWidget(self.MainWidget)
+
+    def show_vuln_info(self, VulnData):
         self.stackedWidget.setCurrentIndex(8)
 
-        import Forms_of_vuln
-
-        VulnName, VulnSev, VulnDescriptionForm, VulnImpactesForm, VulnSoluationForm, VulnSeeAlsoForm, VulnOutputForm = Forms_of_vuln.PUT_DELETE_Mathod_Form()
-
-        if VulnSev.strip().lower() == "info":
+        if VulnData['severity'].lower() == "info":
             self.SevBtn.setStyleSheet('''
                 border-radius: 3px;
                 font-size: 12px;
@@ -1296,7 +1715,7 @@ class MainWindow(QMainWindow):
                 background-color: rgb(103, 172, 225);
                 color: white;
                 ''')
-        elif VulnSev.strip().lower() == "low":
+        elif VulnData['severity'].lower() == "low":
             self.SevBtn.setStyleSheet('''
                 border-radius: 3px;
                 font-size: 12px;
@@ -1305,7 +1724,7 @@ class MainWindow(QMainWindow):
                 background-color: rgb(248, 200, 81);
                 color: white;
                 ''')
-        elif VulnSev.strip().lower() == "medium":
+        elif VulnData['severity'].lower() == "medium":
             self.SevBtn.setStyleSheet('''
                 border-radius: 3px;
                 font-size: 12px;
@@ -1314,7 +1733,7 @@ class MainWindow(QMainWindow):
                 background-color: rgb(241, 140, 67);
                 color: white;
                 ''')
-        elif VulnSev.strip().lower() == "high":
+        elif VulnData['severity'].lower() == "high":
             self.SevBtn.setStyleSheet('''
                 border-radius: 3px;
                 font-size: 12px;
@@ -1323,7 +1742,7 @@ class MainWindow(QMainWindow):
                 background-color: rgb(221, 75, 80);
                 color: white;
                 ''')
-        elif VulnSev.strip().lower() == "critical":
+        elif VulnData['severity'].lower() == "critical":
             self.SevBtn.setStyleSheet('''
                 border-radius: 3px;
                 font-size: 12px;
@@ -1333,18 +1752,18 @@ class MainWindow(QMainWindow):
                 color: white;
                 ''')
 
-        self.DescPlainTextEdit.setText(VulnDescriptionForm.strip())
+        self.DescPlainTextEdit.setText(VulnData['description'])
         self.DescPlainTextEdit.setStyleSheet("font-size: 16px; border: none;")
 
 
-        self.SoluPlainTextEdit.setText(VulnSoluationForm.strip())
+        self.SoluPlainTextEdit.setText(VulnData['solution'])
         self.SoluPlainTextEdit.setStyleSheet("font-size: 16px; border: none;")
 
-        self.ImpactsPlainTextEdit.setText(VulnImpactesForm.strip())
+        self.ImpactsPlainTextEdit.setText(VulnData['impact'])
         self.ImpactsPlainTextEdit.setStyleSheet("font-size: 16px; border: none;")
 
         SeeAlLabel = ""
-        for link in self.extract_links(VulnSeeAlsoForm.strip()):
+        for link in self.extract_links(VulnData['see_also']):
             if self.system_theme == "Light":
                 SeeAlLabel += f"&nbsp;&nbsp;&nbsp;<a href='{link}' style='color: rgb(0, 106, 182);'>{link}</a><br><br>"
             else:
@@ -1380,8 +1799,8 @@ class MainWindow(QMainWindow):
 
 
 
-        self.VulnNameLabel.setText(VulnName.strip())
-        self.SevBtn.setText(VulnSev.strip())
+        self.VulnNameLabel.setText(VulnData['name'])
+        self.SevBtn.setText(VulnData['severity'])
 
 
     def extract_links(self, text):
@@ -1407,8 +1826,9 @@ class MainWindow(QMainWindow):
         dialog.create_folder()
         result = dialog.exec_()
         if result == QDialog.Accepted:
-            # new_name = dialog.line_edit.text()
-            DB_V2.insert_folder_name(dialog.line_edit.text().strip())
+            folder_name = dialog.line_edit.text().strip()
+            DB_V3.create_folder(folder_name, 1)
+
             self.addBtns([(1,dialog.line_edit.text().strip())])
             self.FolderInput.addItem(dialog.line_edit.text().strip())
 
@@ -1422,7 +1842,7 @@ class MainWindow(QMainWindow):
             else:
                 self.NameInput.setStyleSheet('border: 1px solid rgb(255, 94, 93);background-color: rgb(36, 45, 59);color: white;height: 30px;')
 
-        elif DB_V2.check_name_exist(self.NameInput.text().strip()):
+        elif DB_V3.folder_exists(self.NameInput.text().strip()):
             self.NameInput.setToolTip("Scan name already exists try another name!")
             if self.system_theme == "Light":
                 self.NameInput.setStyleSheet('QLineEdit{border: 1px solid rgb(255, 94, 92);background-color: rgb(255,255,255);color: black;height: 30px;} QLineEdit:focus{border: 1px solid rgb(170, 170, 170);}')
@@ -1450,9 +1870,8 @@ class MainWindow(QMainWindow):
                 self.TargetInput.setStyleSheet('border: 1px solid rgb(255, 94, 92);background-color: rgb(36, 45, 59);color: white;height: 30px;')
 
         if ValidateNameInput and ValidateTargetInput:
-            current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M")
-            DB_V2.insert_data(self.NameInput.text(), "On Demand", current_datetime, self.FolderInput.currentText(), self.DescriptionInput.toPlainText(), self.TargetInput.text())
-
+            folder_id = DB_V3.get_folder_id_by_name(self.FolderInput.currentText())
+            DB_V3.insert_scan(self.NameInput.text(), 1, self.DescriptionInput.toPlainText(), folder_id, self.TargetInput.text(), 'pending', 'full')
             btn = self.find_button_by_text(self.FolderInput.currentText())
             self.NameInput.setText('')
             self.DescriptionInput.setPlainText('')
@@ -1599,7 +2018,7 @@ class MainWindow(QMainWindow):
         print(btn.objectName())
         reply = QMessageBox.question(self, 'Confirmation', 'Do you want to remove this Scan ?', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
-            DB_V2.remove_scan_by_name(btn.objectName())
+            DB_V3.delete_scan_by_name(btn.objectName())
             print(self.findClickedButton().click())
 
     def findClickedButton(self):
@@ -1615,8 +2034,9 @@ class MainWindow(QMainWindow):
             index = self.FolderInput.findText(value_to_delete)
             if index != -1:
                 self.FolderInput.removeItem(index)            
-            DB_V2.remove_scan_by_folder_name(button.objectName())
-            DB_V2.delete_row_by_foldername(button.objectName())
+            folder_id = DB_V3.get_folder_id_by_name(button.objectName())
+            DB_V3.delete_scans_by_folder_id(folder_id)
+            DB_V3.delete_folder(folder_id)
 
             button.deleteLater()
             self.MyScansBtn.click()
@@ -1638,8 +2058,10 @@ class MainWindow(QMainWindow):
                 self.FolderInput.removeItem(index)
             self.FolderInput.addItem(dialog.line_edit.text().strip())      
 
-            DB_V2.rename_folder(button.objectName(),dialog.line_edit.text().strip())
+            new_folder_name = dialog.line_edit.text().strip()
+            folder_id = DB_V3.get_folder_id_by_name(button.objectName())
 
+            DB_V3.update_folder(folder_id, new_folder_name)
             button.setObjectName(dialog.line_edit.text().strip())
             button.setText(f"{dialog.line_edit.text().strip()}")
 

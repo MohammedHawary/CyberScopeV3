@@ -29,7 +29,7 @@
 	background-color:rgb(49, 58, 70);
 }
 
-#HostDetailsBar,#HostDetailsBar_2{
+#HostDetailsBar,#HostDetailsBar_2,#HostDetailsBar_3{
 	border-top: 1px solid rgb(77, 80, 90);
 }
 
@@ -192,6 +192,11 @@ QTabBar::tab:selected {
 	color: white;
 }
 
+#label_98,#label_99,#label_100,#label_101,#label_102,#label_103,#label_104,#label_105,#label_106,#label_107,#label_108,#label_109,#label_110,#label_111{
+	font-size: 12px;
+	color: white;
+}
+
 #SeeAlLabel{
 	color: rgb(30, 210, 227);
 }
@@ -226,7 +231,7 @@ QTabBar::tab:selected {
 	color: white;
 }
 
-#label_23,#label_24,#label_25,#label_22{
+#label_23,#label_24,#label_25,#label_22,#label_27{
 	font-size: 14px;
 	font-weight: bold;
 	color: white;
